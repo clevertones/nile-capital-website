@@ -1,0 +1,20 @@
+# Node modules (if you use npm)
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build files
+dist/
+build/
+
+# Environment variables
+.env
+.env.local
