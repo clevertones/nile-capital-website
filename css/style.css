@@ -9,14 +9,15 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
   color: #333;
+  background-color: #07251b;
 }
 
 /* ==================== NAVIGATION BAR ==================== */
 .navbar {
-  background-color: #1a1a1a;
-  padding: 1rem 2rem;
+  background-color: #062a1d;
+  padding: 0.75rem 2rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   position: sticky;
   top: 0;
@@ -25,34 +26,37 @@ body {
 }
 
 .logo {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 1.35rem;
+  font-weight: 700;
   color: #fff;
+  position: absolute;
+  left: 24px;
 }
 
 .logo span {
-  color: #00d4ff;
+  color: #ffb703;
 }
 
 .nav-links {
   display: flex;
   list-style: none;
-  gap: 2rem;
+  gap: 2.25rem;
+  align-items: center;
 }
 
 .nav-links a {
-  color: #fff;
+  color: #f3f3f3;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .nav-links a:hover {
-  color: #00d4ff;
+  color: #ffb703;
 }
 
 .btn-invest {
-  background-color: #00d4ff;
-  color: #1a1a1a;
+  background-color: #ffb703;
+  color: #062a1d;
   padding: 8px 16px;
   border-radius: 5px;
   font-weight: bold;
@@ -60,17 +64,17 @@ body {
 }
 
 .btn-invest:hover {
-  background-color: #fff;
+  background-color: #ffd166;
   transform: translateY(-2px);
 }
 
 /* ==================== HERO SECTION ==================== */
 .hero {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #063229 0%, #0b3f2f 100%);
   color: white;
-  padding: 120px 2rem;
+  padding: 90px 2rem;
   text-align: center;
-  min-height: 600px;
+  min-height: 420px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -78,7 +82,7 @@ body {
 }
 
 .hero h1 {
-  font-size: 3.5rem;
+  font-size: 3rem;
   margin-bottom: 1rem;
   animation: fadeInDown 1s ease;
 }
@@ -91,8 +95,8 @@ body {
 }
 
 .btn-primary {
-  background-color: #00d4ff;
-  color: #1a1a1a;
+  background-color: #ffb703;
+  color: #062a1d;
   padding: 12px 30px;
   border-radius: 5px;
   text-decoration: none;
@@ -103,30 +107,36 @@ body {
 }
 
 .btn-primary:hover {
-  background-color: #fff;
+  background-color: #ffd166;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* ==================== STATS SECTION ==================== */
 .stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 2rem;
-  padding: 60px 2rem;
-  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  gap: 3.5rem;
+  padding: 40px 2rem;
+  background-color: #063229;
   text-align: center;
 }
 
+.stat {
+  max-width: 160px;
+}
+
 .stat h2 {
-  font-size: 2.5rem;
-  color: #667eea;
-  margin-bottom: 0.5rem;
+  font-size: 2.6rem;
+  color: #ffb703;
+  margin-bottom: 0.25rem;
+  font-weight: 800;
 }
 
 .stat p {
-  color: #666;
-  font-size: 1rem;
+  color: #b7deb8;
+  font-size: 0.95rem;
+  margin-top: 0;
 }
 
 /* ==================== ABOUT SECTION ==================== */
@@ -179,7 +189,7 @@ body {
 .contact-form input,
 .contact-form textarea {
   padding: 12px;
-  border: 1px solid #ddd;
+  border: 1px solid #0f4d38;
   border-radius: 5px;
   font-family: inherit;
   font-size: 1rem;
@@ -189,12 +199,12 @@ body {
 .contact-form input:focus,
 .contact-form textarea:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+  border-color: #ffb703;
+  box-shadow: 0 0 5px rgba(255, 183, 3, 0.3);
 }
 
 .contact-info {
-  background-color: #f4f4f4;
+  background-color: #0b3f2f;
   padding: 2rem;
   border-radius: 8px;
   max-width: 400px;
@@ -207,7 +217,7 @@ body {
 
 /* ==================== FOOTER ==================== */
 footer {
-  background-color: #1a1a1a;
+  background-color: #062a1d;
   color: white;
   text-align: center;
   padding: 2rem;
