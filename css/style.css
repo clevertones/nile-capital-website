@@ -1,15 +1,28 @@
-/* ==================== GLOBAL STYLES ==================== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* ── NILE BRAND VARIABLES ── */
+:root {
+  --green: #04342C;
+  --teal: #1D9E75;
+  --teal-light: #5DCAA5;
+  --mint: #E1F5EE;
+  --gold: #EF9F27;
+  --white: #F4FAF8;
+  --ink: #222222;
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', Arial, sans-serif;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --radius: 12px;
 }
 
+/* ── GLOBAL RESET ── */
+* {
+  margin: 0; padding: 0;
+  box-sizing: border-box;
+}
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  line-height: 1.6;
-  color: #333;
-  background-color: #07251b;
+  font-family: var(--font-body);
+  background: var(--white);
+  color: var(--ink);
+  line-height: 1.7;
 }
 
 /* ==================== NAVIGATION BAR ==================== */
