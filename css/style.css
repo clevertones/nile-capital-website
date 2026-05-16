@@ -136,31 +136,37 @@ body {
   box-shadow: 0 8px 30px rgba(239,159,39,0.5);
 }
 
-/* ==================== STATS SECTION ==================== */
+/* ── STATS ── */
 .stats {
-  display: flex;
-  justify-content: center;
-  gap: 3.5rem;
-  padding: 40px 2rem;
-  background-color: #063229;
-  text-align: center;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  padding: 80px 48px;
+  background: #062e25;
 }
-
 .stat {
-  max-width: 160px;
+  background: rgba(255,255,255,0.05);
+  border: 0.5px solid rgba(29,158,117,0.3);
+  border-radius: var(--radius);
+  padding: 32px 24px;
+  text-align: center;
+  transition: transform 0.25s, border-color 0.25s;
 }
-
+.stat:hover {
+  transform: translateY(-6px);
+  border-color: var(--gold);
+}
 .stat h2 {
-  font-size: 2.6rem;
-  color: #ffb703;
-  margin-bottom: 0.25rem;
-  font-weight: 800;
+  font-family: var(--font-heading);
+  font-size: 42px;
+  color: var(--gold);
+  margin-bottom: 8px;
 }
-
 .stat p {
-  color: #b7deb8;
-  font-size: 0.95rem;
-  margin-top: 0;
+  font-size: 13px;
+  color: #9FE1CB;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 /* ==================== ABOUT SECTION ==================== */
