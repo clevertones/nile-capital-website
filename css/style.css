@@ -25,60 +25,67 @@ body {
   line-height: 1.7;
 }
 
-/* ==================== NAVIGATION BAR ==================== */
+/* ── NAVBAR ── */
 .navbar {
-  background-color: #062a1d;
-  padding: 0.75rem 2rem;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  padding: 0 48px;
+  height: 68px;
+  background: var(--green);
   position: sticky;
   top: 0;
-  z-index: 100;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.2);
 }
-
 .logo {
-  font-size: 1.35rem;
+  font-family: var(--font-heading);
+  font-size: 22px;
   font-weight: 700;
-  color: #fff;
-  position: absolute;
-  left: 24px;
+  color: #E1F5EE;
+  letter-spacing: 1px;
 }
-
 .logo span {
-  color: #ffb703;
+  color: var(--gold);
 }
-
 .nav-links {
   display: flex;
   list-style: none;
-  gap: 2.25rem;
+  gap: 36px;
   align-items: center;
 }
-
 .nav-links a {
-  color: #f3f3f3;
+  color: #E1F5EE;
   text-decoration: none;
-  transition: color 0.3s ease;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  position: relative;
+  padding-bottom: 4px;
+  transition: color 0.2s;
 }
-
-.nav-links a:hover {
-  color: #ffb703;
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 2px;
+  background: var(--gold);
+  transition: width 0.3s ease;
 }
-
+.nav-links a:hover::after {
+  width: 100%;
+}
 .btn-invest {
-  background-color: #ffb703;
-  color: #062a1d;
-  padding: 8px 16px;
-  border-radius: 5px;
-  font-weight: bold;
-  transition: all 0.3s ease;
+  background: var(--gold) !important;
+  color: var(--green) !important;
+  padding: 10px 22px !important;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: background 0.2s, transform 0.1s;
 }
-
 .btn-invest:hover {
-  background-color: #ffd166;
-  transform: translateY(-2px);
+  background: #d4891f !important;
+  transform: translateY(-1px);
 }
 
 /* ==================== HERO SECTION ==================== */
