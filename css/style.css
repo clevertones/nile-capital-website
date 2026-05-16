@@ -25,6 +25,34 @@ body {
   line-height: 1.7;
 }
 
+/* ── FIX: Heading colours across all pages ── */
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  color: var(--green);
+  font-weight: 700;
+}
+
+/* ── Page heading style for About/Contact ── */
+.page-heading {
+  font-size: clamp(28px, 4vw, 48px);
+  color: var(--green);
+  text-align: center;
+  margin-bottom: 16px;
+  position: relative;
+  padding-bottom: 16px;
+}
+.page-heading::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: var(--gold);
+  border-radius: 2px;
+}
+
 /* ── NAVBAR ── */
 .navbar {
   display: flex;
