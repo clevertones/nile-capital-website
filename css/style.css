@@ -315,21 +315,40 @@ h1, h2, h3, h4 {
 }
 
 .contact-form input,
-.contact-form textarea {
-  padding: 12px;
-  border: 1px solid #0f4d38;
-  border-radius: 5px;
-  font-family: inherit;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
+.contact-form textarea,
+.contact-form select,
+.form-input {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--ink);
+  background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  margin-bottom: 14px;
+  display: block;
 }
 
 .contact-form input:focus,
-.contact-form textarea:focus {
+.contact-form textarea:focus,
+.contact-form select:focus,
+.form-input:focus {
   outline: none;
-  border-color: #ffb703;
-  box-shadow: 0 0 5px rgba(255, 183, 3, 0.3);
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(29,158,117,0.15);
 }
+
+.contact-info-card {
+  background: var(--green);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin-top: 32px;
+  text-align: center;
+}
+.contact-info-card p { color: #9FE1CB; font-size: 14px; margin: 6px 0; }
+.contact-info-card a { color: var(--gold); text-decoration: none; }
 
 .contact-info {
   background-color: #0b3f2f;
