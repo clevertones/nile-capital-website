@@ -5,11 +5,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About Us — NiLe Capital Fund</title>
+  <!-- SEO Meta Tags — paste in <head> of all pages -->
+  <meta name="description" content="NiLe Capital Fund — A technology-forward private capital fund investing in Africa's highest-growth sectors. Flow. Grow. Prosper.">
+  <meta name="keywords" content="Africa investment fund, private equity Tanzania, East Africa capital, NiLe Capital">
+  <meta name="author" content="Clever Gwakabale">
+  <meta property="og:title" content="NiLe Capital Fund — Flow. Grow. Prosper.">
+  <meta property="og:description" content="Investing in Africa's highest-growth sectors with transparency and technology.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nilecapital.com">
+  <link rel="canonical" href="https://nilecapital.com">
   <!-- Paste this in <head> before your style.css link -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=4">
 </head>
 
 <body data-page="about">
@@ -17,10 +26,16 @@
   <!-- NAVIGATION BAR -->
   <nav class="navbar">
     <div class="logo">Ni<span>L</span>e Capital</div>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="contact.html">Contact</a></li>
+    <!-- Hamburger icon (hidden on desktop) -->
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html" data-link="home">Home</a></li>
+      <li><a href="about.html" data-link="about">About</a></li>
+      <li><a href="strategy.html" data-link="strategy">Strategy</a></li>
+      <li><a href="legal.html" data-link="legal">Legal</a></li>
+      <li><a href="contact.html" data-link="contact">Contact</a></li>
       <li><a href="contact.html" class="btn-invest">Invest With Us</a></li>
     </ul>
   </nav>
@@ -37,7 +52,7 @@
 
   <!-- FOUNDER SECTION -->
   <section class="founder-section">
-    <div class="founder-avatar">CG</div>
+    <img src="images/Founder.jpg" alt="Clever Gwakabale, Founder & CEO" class="founder-avatar">
     <div class="founder-text">
       <span class="founder-label">FOUNDER & CEO</span>
       <h2>Clever Gwakabale</h2>
@@ -75,11 +90,35 @@
     </div>
   </section>
 
+  <!-- STATS SECTION -->
+  <section class="stats">
+    <div class="stat">
+      <h2><span class="counter" data-target="20" data-prefix="$" data-suffix="M">0</span></h2>
+      <p>Fund I Target</p>
+    </div>
+    <div class="stat">
+      <h2><span class="counter" data-target="22" data-suffix="%">0</span></h2>
+      <p>Target IRR</p>
+    </div>
+    <div class="stat">
+      <h2><span class="counter" data-target="4">0</span></h2>
+      <p>Investment Verticals</p>
+    </div>
+    <div class="stat">
+      <h2><span class="counter" data-target="7" data-suffix="yr">0</span></h2>
+      <p>Fund Life</p>
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <footer>
-    <p>© 2026 NiLe Capital Fund Limited · clever@nilecapital.com · +255 768 736 334</p>
+    <p>© 2026 NiLe Capital Fund Limited · ceo.nilecapital@gmail.com · +255 768 736 334</p>
+    <p style="margin-top:8px;font-size:11px">
+      <a href="legal.html" style="color:#5DCAA5;text-decoration:none">Legal Disclaimer</a> · This is not an offer to sell securities. For accredited investors only.
+    </p>
   </footer>
 
+  <button id="back-to-top" aria-label="Back to top">↑</button>
   <script src="js/main.js"></script>
 </body>
 </html>

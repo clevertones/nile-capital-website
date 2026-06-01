@@ -1,57 +1,268 @@
-// Smooth scrolling for navigation links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    });
+/* ═══════════════════════════════════════ NiLe Capital Fund — main.js All JavaScript for the website ═══════════════════════════════════════ */
+
+const EMAILJS_SERVICE_ID = 'nile_service';
+const EMAILJS_TEMPLATE_ID = 'nile_enquiry';
+const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';
+const EMAILJS_RECIPIENT = 'ceo.nilecapital@gmail.com';
+
+// ── Run everything when page is loaded ──
+document.addEventListener('DOMContentLoaded', () => {
+  initHamburger();
+  initActiveNav();
+  initScrollAnimations();
+  initCounters();
+  initFormValidation();
+  initAllocBars();
+  initBackToTop();
 });
 
-// Handle contact form submission
-const contactForm = document.querySelector('.contact-form');
-if (contactForm) {
-    contactForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-        
-        // Get form values
-        const name = this.querySelector('input[type="text"]').value;
-        const email = this.querySelector('input[type="email"]').value;
-        const message = this.querySelector('textarea').value;
-        
-        // Simple validation
-        if (name && email && message) {
-            alert('Thank you for your message! We will get back to you soon.');
-            this.reset();
-        } else {
-            alert('Please fill in all fields.');
-        }
+/* ══════════════════════════════════════ FEATURE 1 — HAMBURGER MENU ══════════════════════════════════════ */
+function initHamburger() {
+  const btn = document.getElementById('hamburger');
+  const nav = document.getElementById('nav-links');
+  if (!btn || !nav) return;
+
+  btn.addEventListener('click', () => {
+    btn.classList.toggle('open');
+    nav.classList.toggle('open');
+  });
+
+  nav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      btn.classList.remove('open');
+      nav.classList.remove('open');
     });
+  });
 }
 
-// Add scroll animation for elements
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -100px 0px'
-};
+/* ══════════════════════════════════════ FEATURE 2 — ACTIVE NAV LINK ══════════════════════════════════════ */
+function initActiveNav() {
+  const page = document.body.dataset.page;
+  document.querySelectorAll('.nav-links a[data-link]').forEach(link => {
+    if (link.dataset.link === page) {
+      link.classList.add('active');
+    }
+  });
+}
 
-const observer = new IntersectionObserver(function (entries) {
+/* ══════════════════════════════════════ FEATURE 3 — SCROLL FADE-IN ANIMATIONS ══════════════════════════════════════ */
+function initScrollAnimations() {
+  const targets = document.querySelectorAll(
+    '.stat, .v-card, .why-card, .mv-card, .vertical-card, .founder-section, .cta-strip, .section-header'
+  );
+
+  targets.forEach((el, i) => {
+    el.classList.add('fade-up');
+    el.style.transitionDelay = `${(i % 4) * 0.1}s`;
+  });
+
+  const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
     });
-}, observerOptions);
+  }, { threshold: 0.15 });
 
-// Observe elements for scroll animations
-document.querySelectorAll('.stat').forEach(stat => {
-    stat.style.opacity = '0';
-    stat.style.transform = 'translateY(20px)';
-    stat.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    observer.observe(stat);
-});
+  targets.forEach(el => observer.observe(el));
+}
+
+/* ══════════════════════════════════════ FEATURE 4 — ANIMATED NUMBER COUNTERS ══════════════════════════════════════ */
+function initCounters() {
+  const counters = document.querySelectorAll('.counter');
+  if (!counters.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !entry.target.dataset.counted) {
+        entry.target.dataset.counted = 'true';
+        animateCounter(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  counters.forEach(c => observer.observe(c));
+}
+
+function animateCounter(el) {
+  const target = Number(el.dataset.target) || 0;
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  const duration = 1800;
+  const start = performance.now();
+
+  function step(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    el.textContent = `${prefix}${Math.floor(ease * target)}${suffix}`;
+
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    } else {
+      el.textContent = `${prefix}${target}${suffix}`;
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
+function initAllocBars() {
+  const bars = document.querySelectorAll('.alloc-fill');
+  if (!bars.length) return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.width = e.target.dataset.width + '%';
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  bars.forEach(b => obs.observe(b));
+}
+
+function initBackToTop() {
+  const btn = document.getElementById('back-to-top');
+  if (!btn) return;
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+/* ══════════════════════════════════════ FEATURE 5 — CONTACT FORM VALIDATION ══════════════════════════════════════ */
+function initFormValidation() {
+  const form = document.getElementById('contact-form');
+  if (!form) return;
+
+  // ── EmailJS init — paste YOUR keys here ──
+  if (window.emailjs && EMAILJS_PUBLIC_KEY !== 'YOUR_PUBLIC_KEY') {
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearErrors();
+
+    const name = form.querySelector('[name="name"]');
+    const email = form.querySelector('[name="email"]');
+    const invest = form.querySelector('[name="investment"]');
+    const msg = form.querySelector('[name="message"]');
+    const submitButton = form.querySelector('button[type="submit"]');
+    let valid = true;
+
+    if (!name.value.trim()) {
+      showError(name, 'Please enter your full name');
+      valid = false;
+    }
+
+    if (!email.value.trim() || !validateEmail(email.value)) {
+      showError(email, 'Please enter a valid email address');
+      valid = false;
+    }
+
+    if (invest && !invest.value) {
+      showError(invest, 'Please select an investment amount');
+      valid = false;
+    }
+
+    if (!msg.value.trim()) {
+      showError(msg, 'Please write a short message');
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    setSubmitButtonState(submitButton, true);
+
+    if (
+      window.emailjs &&
+      EMAILJS_SERVICE_ID !== 'YOUR_SERVICE_ID' &&
+      EMAILJS_TEMPLATE_ID !== 'YOUR_TEMPLATE_ID' &&
+      EMAILJS_PUBLIC_KEY !== 'YOUR_PUBLIC_KEY'
+    ) {
+      try {
+        await emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, form);
+        showSuccess();
+        return;
+      } catch (error) {
+        console.error('EmailJS error:', error);
+        showFormError(form, 'Message could not be sent. Please contact ceo.nilecapital@gmail.com directly.');
+      }
+    } else {
+      const contactData = buildContactEmailData(
+        name.value.trim(),
+        email.value.trim(),
+        invest.value,
+        msg.value.trim()
+      );
+      openMailClient(contactData.subject, contactData.body, EMAILJS_RECIPIENT);
+      showSuccess();
+      return;
+    }
+
+    setSubmitButtonState(submitButton, false);
+  });
+}
+
+function setSubmitButtonState(button, sending) {
+  if (!button) return;
+  button.disabled = sending;
+  button.textContent = sending ? 'Sending…' : 'Send Message';
+}
+
+function validateEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function buildContactEmailData(name, email, investment, message) {
+  const subject = 'New Investor Enquiry — NiLe Capital Fund';
+  const body = `From: ${name} (${email})\nInvestment Amount: ${investment}\nMessage: ${message}\n\n---\nSent from NiLe Capital Website`;
+  return { subject, body };
+}
+
+function openMailClient(subject, body, recipient = EMAILJS_RECIPIENT) {
+  const mailto = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.open(mailto, '_blank');
+}
+
+function showError(field, message) {
+  if (!field) return;
+  field.style.borderColor = '#e74c3c';
+  const err = document.createElement('div');
+  err.className = 'form-error';
+  err.textContent = `⚠ ${message}`;
+  field.parentNode.insertBefore(err, field.nextSibling);
+
+  field.addEventListener('input', () => {
+    field.style.borderColor = '';
+    err.remove();
+  }, { once: true });
+}
+
+function showFormError(form, message) {
+  if (!form) return;
+  const err = document.createElement('div');
+  err.className = 'form-error';
+  err.textContent = `⚠ ${message}`;
+  form.prepend(err);
+}
+
+function clearErrors() {
+  document.querySelectorAll('.form-error').forEach(e => e.remove());
+}
+
+function showSuccess() {
+  const form = document.getElementById('contact-form');
+  if (!form) return;
+
+  form.innerHTML = `
+    <div class="form-success">
+      <div class="success-icon">✓</div>
+      <h3>Message Received!</h3>
+      <p>Thank you for your interest in NiLe Capital Fund. Clever Gwakabale will be in touch within 24 hours.</p>
+    </div>
+  `;
+}
