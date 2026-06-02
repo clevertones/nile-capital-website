@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFormValidation();
   initAllocBars();
   initBackToTop();
+  initCookieConsent();
 });
 
 /* ══════════════════════════════════════ FEATURE 1 — HAMBURGER MENU ══════════════════════════════════════ */
@@ -140,6 +141,7 @@ function initFormValidation() {
   // ── EmailJS init — paste YOUR keys here ──
   if (window.emailjs && EMAILJS_PUBLIC_KEY !== 'YOUR_PUBLIC_KEY') {
     emailjs.init(EMAILJS_PUBLIC_KEY);
+    console.info('EmailJS initialized');
   }
 
   form.addEventListener('submit', async (e) => {
@@ -177,6 +179,7 @@ function initFormValidation() {
 
     setSubmitButtonState(submitButton, true);
 
+    // If EmailJS credentials are configured, send via EmailJS and explicitly set recipient
     if (
       window.emailjs &&
       EMAILJS_SERVICE_ID !== 'YOUR_SERVICE_ID' &&
@@ -184,26 +187,36 @@ function initFormValidation() {
       EMAILJS_PUBLIC_KEY !== 'YOUR_PUBLIC_KEY'
     ) {
       try {
-        await emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, form);
+        const templateParams = {
+          from_name: name.value.trim(),
+          from_email: email.value.trim(),
+          investment: invest ? invest.value : '',
+          message: msg.value.trim(),
+          to_email: EMAILJS_RECIPIENT
+        };
+
+        const response = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+        console.info('EmailJS sent', response);
         showSuccess();
         return;
       } catch (error) {
         console.error('EmailJS error:', error);
         showFormError(form, 'Message could not be sent. Please contact ceo.nilecapital@gmail.com directly.');
+        setSubmitButtonState(submitButton, false);
+        return;
       }
-    } else {
-      const contactData = buildContactEmailData(
-        name.value.trim(),
-        email.value.trim(),
-        invest.value,
-        msg.value.trim()
-      );
-      openMailClient(contactData.subject, contactData.body, EMAILJS_RECIPIENT);
-      showSuccess();
-      return;
     }
 
-    setSubmitButtonState(submitButton, false);
+    // Fallback: open user's mail client when EmailJS isn't configured
+    const contactData = buildContactEmailData(
+      name.value.trim(),
+      email.value.trim(),
+      invest ? invest.value : '',
+      msg.value.trim()
+    );
+    openMailClient(contactData.subject, contactData.body, EMAILJS_RECIPIENT);
+    showSuccess();
+    return;
   });
 }
 
@@ -265,4 +278,48 @@ function showSuccess() {
       <p>Thank you for your interest in NiLe Capital Fund. Clever Gwakabale will be in touch within 24 hours.</p>
     </div>
   `;
+}
+
+/* ══════════════════════════════════════ FEATURE 6 — COOKIE CONSENT BANNER ══════════════════════════════════════ */
+function initCookieConsent() {
+  try {
+    const stored = localStorage.getItem('nile_cookie_consent');
+    if (stored === 'accepted' || stored === 'declined') return; // already decided
+  } catch (e) {
+    // ignore storage errors
+  }
+
+  if (document.getElementById('cookie-banner')) return;
+
+  const banner = document.createElement('div');
+  banner.id = 'cookie-banner';
+  banner.className = 'cookie-banner';
+  banner.innerHTML = `
+    <p>We use cookies to improve the site and provide analytics. By clicking "Accept" you consent to Google Analytics.</p>
+    <div class="cookie-actions">
+      <button class="cookie-btn decline">Decline</button>
+      <button class="cookie-btn accept">Accept</button>
+    </div>
+  `;
+
+  document.body.appendChild(banner);
+
+  const accept = banner.querySelector('.accept');
+  const decline = banner.querySelector('.decline');
+
+  accept.addEventListener('click', () => {
+    try { localStorage.setItem('nile_cookie_consent', 'accepted'); } catch(e){}
+    window['ga-disable-G-HH4CZYWJXX'] = false;
+    if (typeof gtag === 'function') {
+      try { gtag('consent', 'update', { 'analytics_storage': 'granted' }); } catch(e){}
+      try { gtag('config', 'G-HH4CZYWJXX'); } catch(e){}
+    }
+    banner.remove();
+  });
+
+  decline.addEventListener('click', () => {
+    try { localStorage.setItem('nile_cookie_consent', 'declined'); } catch(e){}
+    window['ga-disable-G-HH4CZYWJXX'] = true;
+    banner.remove();
+  });
 }

@@ -15,6 +15,24 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://nilecapital.com">
   <link rel="canonical" href="https://nilecapital.com">
+  <!-- Google tag (gtag.js) with consent pre-check -->
+  <script>
+    (function(){
+      try {
+        var consent = localStorage.getItem('nile_cookie_consent');
+        if (consent !== 'accepted') {
+          window['ga-disable-G-HH4CZYWJXX'] = true;
+        }
+      } catch(e){}
+    })();
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HH4CZYWJXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-HH4CZYWJXX', { 'anonymize_ip': true });
+  </script>
   <!-- Paste this in <head> before your style.css link -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
