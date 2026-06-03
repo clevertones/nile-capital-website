@@ -295,7 +295,7 @@ function initCookieConsent() {
   banner.id = 'cookie-banner';
   banner.className = 'cookie-banner';
   banner.innerHTML = `
-    <p>We use cookies to improve the site and provide analytics. By clicking "Accept" you consent to Google Analytics.</p>
+    <p>We use cookies to improve the site and provide analytics. By clicking "Accept" you consent to Google Analytics. <a href="privacy.html" class="cookie-link">Privacy Policy</a></p>
     <div class="cookie-actions">
       <button class="cookie-btn decline">Decline</button>
       <button class="cookie-btn accept">Accept</button>

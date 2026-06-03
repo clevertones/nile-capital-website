@@ -94,5 +94,31 @@
 
   <button id="back-to-top" aria-label="Back to top">↑</button>
   <script src="js/main.js"></script>
+  <!-- Nile chatbot widget -->
+  <div id="nile-chat-launcher">
+    <div id="nile-chat-window" class="hidden" role="dialog" aria-label="Nile chat assistant">
+      <div id="nile-chat-header">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M8 30 L24 38 L40 30 L36 24 L12 24 Z" fill="rgba(255,255,255,0.9)"/>
+          <path d="M24 10 L24 24 L34 24 Z" fill="rgba(255,255,255,0.7)"/>
+          <path d="M24 10 L24 24 L14 24 Z" fill="rgba(255,255,255,0.55)"/>
+          <line x1="24" y1="8" x2="24" y2="24" stroke="rgba(255,255,255,0.9)" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M6 36 Q24 44 42 36" stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </svg>
+        <div class="nile-header-info"><div class="name">Nile</div><div class="status">NiLe Capital Assistant · Online</div></div>
+        <button id="nile-close-btn" aria-label="Close chat">✕</button>
+      </div>
+      <div id="nile-chat-messages" aria-live="polite"></div>
+      <div id="nile-chat-input-area">
+        <input id="nile-chat-input" type="text" placeholder="Ask me anything…" autocomplete="off" aria-label="Type your message" />
+        <button id="nile-send-btn" aria-label="Send message"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+      </div>
+      <div id="nile-chat-footer">Powered by NiLe Capital · AI Assistant</div>
+    </div>
+    <div id="nile-intro-card" class="hidden"><button class="intro-dismiss" id="nile-intro-dismiss" aria-label="Dismiss">✕</button><div class="intro-title">👋 Hi, I'm Nile!</div><div class="intro-body">Your NiLe Capital AI assistant. Ask me anything about investing in Africa's fastest-growing sectors.</div><button class="intro-cta" id="nile-intro-cta">Start a conversation →</button></div>
+    <div id="nile-launcher-row"><div id="nile-label-tag" role="button" tabindex="0" aria-label="Open Nile chat"><span class="label-name">Nile</span><span class="label-sub"><span class="label-dot"></span>AI Assistant · Online</span></div>
+      <button id="nile-chat-bubble" aria-label="Open Nile chat assistant"><span id="nile-unread-badge" class="hidden">1</span><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 30 L24 38 L40 30 L36 24 L12 24 Z" fill="white"/><path d="M24 10 L24 24 L34 24 Z" fill="rgba(255,255,255,0.8)"/><path d="M24 10 L24 24 L14 24 Z" fill="rgba(255,255,255,0.6)"/><line x1="24" y1="8" x2="24" y2="24" stroke="white" stroke-width="1.8" stroke-linecap="round"/><path d="M6 36 Q24 43 42 36" stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button></div>
+  </div>
+  <script src="js/nile-chat.js"></script>
 </body>
 </html>

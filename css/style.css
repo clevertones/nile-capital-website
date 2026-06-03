@@ -648,22 +648,27 @@ h1, h2, h3, h4 {
 }
 .verticals-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 28px;
+  align-items: stretch;
 }
 .v-card {
   background: #FAFAFA;
-  border-radius: 12px;
-  padding: 40px 28px;
-  text-align: center;
+  border-radius: 18px;
+  padding: 32px 24px;
+  text-align: left;
   border: none;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-  transition: all 0.3s ease;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .v-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+  transform: translateY(-10px);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.12);
 }
 .vertical-card {
   background: #FAFAFA;
@@ -798,6 +803,58 @@ h1, h2, h3, h4 {
   font-size: 1.1rem;
   margin-bottom: 2rem;
 }
+
+/* ── Nile Chatbot widget styles (appended) ── */
+#nile-chat-launcher { position: fixed; bottom: 100px; right: 20px; z-index: 9999; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; font-family: 'Segoe UI', system-ui, sans-serif; }
+#nile-chat-bubble { width: 54px; height: 54px; border-radius: 50%; background: #157852; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(0,0,0,0.18); transition: transform 0.18s, background 0.18s; position: relative; }
+#nile-chat-bubble:hover { background: #105f45; transform: scale(1.08); }
+#nile-chat-bubble svg { animation: boat-sway 3.6s ease-in-out infinite; transform-origin: center 60%; }
+#nile-unread-badge { position: absolute; top: -3px; right: -3px; background: #E24B4A; color: #fff; font-size: 11px; font-weight: 700; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; }
+#nile-chat-window { width: 360px; max-width: calc(100vw - 40px); height: 520px; max-height: calc(100vh - 120px); background: #fff; border-radius: 16px; box-shadow: 0 8px 40px rgba(0,0,0,0.16); display: flex; flex-direction: column; overflow: hidden; transform-origin: bottom right; transition: transform 0.22s cubic-bezier(.4,0,.2,1), opacity 0.22s; }
+#nile-chat-window.hidden { transform: scale(0.85) translateY(20px); opacity: 0; pointer-events: none; }
+#nile-chat-header { background: #157852; padding: 12px 14px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+#nile-chat-header svg { width: 38px; height: 38px; flex-shrink: 0; }
+#nile-chat-header button#nile-close-btn { margin-left: auto; width: 30px; height: 30px; border-radius: 50%; border: none; background: rgba(255,255,255,0.18); color: #fff; font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: background 0.18s, transform 0.18s; }
+#nile-chat-header button#nile-close-btn:hover { background: rgba(255,255,255,0.28); transform: scale(1.05); }
+.nile-header-info .name { color: #fff; font-weight: 600; font-size: 15px; line-height: 1.2; }
+.nile-header-info .status { color: rgba(255,255,255,0.82); font-size: 12px; }
+#nile-chat-messages { flex: 1; overflow-y: auto; padding: 16px 14px; display: flex; flex-direction: column; gap: 10px; background: #f5f7f6; }
+@keyframes boat-sway {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  20% { transform: translateX(-1px) rotate(-2deg); }
+  40% { transform: translateX(1px) rotate(1.5deg); }
+  60% { transform: translateX(-1px) rotate(-1.5deg); }
+  80% { transform: translateX(1px) rotate(2deg); }
+}
+.nile-msg { max-width: 84%; font-size: 14px; line-height: 1.55; padding: 10px 13px; border-radius: 12px; animation: nile-fadeIn 0.18s ease; }
+@keyframes nile-fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; } }
+.nile-msg.bot { background: #fff; color: #1a2e26; border: 0.5px solid #dce9e4; align-self: flex-start; border-bottom-left-radius: 4px; }
+.nile-msg.user { background: #157852; color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+.nile-typing { display: flex; gap: 5px; align-items: center; padding: 10px 13px; background: #fff; border: 0.5px solid #dce9e4; border-radius: 12px; border-bottom-left-radius: 4px; align-self: flex-start; }
+.nile-typing span { width: 7px; height: 7px; background: #9fc8b9; border-radius: 50%; animation: nile-bounce 1.2s infinite; }
+@keyframes nile-bounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-5px); } }
+.nile-quick-btns { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.nile-quick-btn { background: #fff; border: 1px solid #1D9E75; color: #0F6E56; font-size: 12px; padding: 5px 11px; border-radius: 20px; cursor: pointer; font-family: inherit; transition: background 0.14s; }
+#nile-chat-input-area { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid #e4ede9; background: #fff; flex-shrink: 0; }
+#nile-chat-input { flex: 1; border: 1px solid #c8ddd6; border-radius: 22px; padding: 9px 14px; font-size: 14px; font-family: inherit; outline: none; background: #f5f7f6; color: #1a2e26; resize: none; }
+#nile-send-btn { width: 38px; height: 38px; border-radius: 50%; background: #136b4c; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.14s, transform 0.14s; }
+#nile-send-btn:hover { background: #0e553f; transform: scale(1.04); }
+#nile-chat-footer { text-align: center; font-size: 11px; color: #8aaa9d; padding: 6px 0 8px; background: #fff; }
+#nile-launcher-row { display: flex; align-items: center; gap: 10px; }
+.nile-msg a { color: #157852; text-decoration: underline; }
+.nile-msg a:hover { color: #105f45; }
+#nile-label-tag { background: #fff; border: 0.5px solid #c8ddd6; border-radius: 22px; padding: 8px 16px; display: flex; flex-direction: column; align-items: flex-end; box-shadow: 0 2px 10px rgba(0,0,0,0.10); cursor: pointer; transition: box-shadow 0.18s, transform 0.18s; position: relative; }
+#nile-label-tag .label-name { font-size: 14px; font-weight: 600; color: #1a2e26; line-height: 1.2; }
+#nile-label-tag .label-sub { font-size: 11px; color: #6b9b8c; white-space: nowrap; }
+#nile-label-tag .label-dot { display: inline-block; width: 7px; height: 7px; background: #1D9E75; border-radius: 50%; margin-right: 4px; vertical-align: middle; animation: nile-pulse 2s infinite; }
+@keyframes nile-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
+#nile-intro-card { background: #fff; border: 0.5px solid #c8ddd6; border-radius: 14px; padding: 14px 16px; max-width: 240px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); position: relative; animation: nile-fadeIn 0.3s ease; cursor: default; }
+#nile-intro-card .intro-title { font-size: 13px; font-weight: 600; color: #1a2e26; margin-bottom: 4px; }
+#nile-intro-card .intro-body { font-size: 12px; color: #4a7a6a; line-height: 1.5; margin-bottom: 10px; }
+#nile-intro-card .intro-cta { background: #1D9E75; color: #fff; border: none; border-radius: 20px; padding: 6px 14px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.14s; width: 100%; }
+#nile-intro-card .intro-dismiss { position: absolute; top: 8px; right: 10px; background: none; border: none; font-size: 14px; color: #9fc8b9; cursor: pointer; line-height: 1; padding: 2px 4px; }
+#nile-intro-card.hidden { display: none; }
+@media (max-width: 420px) { #nile-chat-window { width: calc(100vw - 20px); } #nile-chat-launcher { right: 16px; bottom: 90px; } #nile-intro-card { max-width: 200px; } }
 
 /* ── COOKIE CONSENT BANNER ── */
 .cookie-banner {

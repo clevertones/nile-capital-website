@@ -64,6 +64,16 @@ git push origin main
 
 3. Your website will be available at: `https://clevertones.github.io/nile-capital-website/`
 
+### Deployment on Vercel
+
+1. Create a new Vercel project and connect it to this repository.
+2. Add a project environment variable:
+   - `ANTHROPIC_API_KEY`
+3. Keep `api/chat.js` in the repo root so Vercel serves it as a serverless function.
+4. Deploy the project.
+
+After deployment, the chat widget should use `/api/chat` on your Vercel domain.
+
 ## Customization
 
 ### Colors
@@ -104,3 +114,25 @@ MIT License - feel free to use this project for commercial or personal purposes.
 ## Contact
 
 For more information about NiLe Capital Fund, visit our website or contact us through the contact form.
+
+## Local proxy for chat (Anthropic)
+
+This project includes a small Node/Express proxy that forwards `/api/chat` requests to the Anthropic API using a server-side API key.
+
+1. Copy `.env.example` to `.env` and set `ANTHROPIC_API_KEY`.
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Start the proxy (default port 3000):
+
+```bash
+npm start
+```
+
+4. Open your site (if using a static server) and ensure the chat widget POSTs to `/api/chat`.
+
+Important: Do NOT commit your real API key to the repository. Use environment variables and a secure host for production.
+
