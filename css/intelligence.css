@@ -1,0 +1,246 @@
+/* ============================================================
+   Nile Capital — East Africa Investment Dashboard
+   css/intelligence.css
+   ============================================================ */
+
+:root {
+  --color-bg:           #ffffff;
+  --color-bg-secondary: #f5f5f3;
+  --color-border:       rgba(0,0,0,0.12);
+  --color-border-hover: rgba(0,0,0,0.25);
+  --color-text:         #1a1a18;
+  --color-text-muted:   #5f5e5a;
+  --color-text-hint:    #888780;
+  --color-green:        #0F6E56;
+  --color-green-light:  #E1F5EE;
+  --color-green-dark:   #0F6E56;
+  --color-red:          #D85A30;
+  --radius-md:          8px;
+  --radius-lg:          12px;
+  --font-sans:          'Syne', sans-serif;
+  --font-mono:          'IBM Plex Mono', monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg:           #1c1c1a;
+    --color-bg-secondary: #262624;
+    --color-border:       rgba(255,255,255,0.10);
+    --color-border-hover: rgba(255,255,255,0.22);
+    --color-text:         #f0efe8;
+    --color-text-muted:   #b4b2a9;
+    --color-text-hint:    #888780;
+    --color-green-light:  #04342c;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body.nc-page {
+  font-family: var(--font-sans);
+  background: var(--color-bg-secondary);
+  color: var(--color-text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+body.nc-page h1,
+body.nc-page h2,
+body.nc-page h3,
+body.nc-page h4 {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.nc-root {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* Header */
+.nc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1.25rem;
+  border-bottom: 0.5px solid var(--color-border);
+  margin-bottom: 1.5rem;
+}
+.nc-logo { display: flex; align-items: center; gap: 12px; }
+.nc-logo-mark {
+  width: 36px; height: 36px;
+  background: transparent;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.nc-logo-mark svg { width: 36px; height: 36px; }
+.nc-logo-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+  display: block;
+}
+.nc-logo-text { font-size: 16px; font-weight: 700; letter-spacing: -0.3px; }
+.nc-logo-sub {
+  font-size: 11px; color: var(--color-text-muted);
+  font-family: var(--font-mono); letter-spacing: 0.4px; text-transform: uppercase;
+}
+.nc-badge {
+  background: var(--color-green-light);
+  color: var(--color-green-dark);
+  font-size: 11px; padding: 4px 12px;
+  border-radius: 20px; font-family: var(--font-mono); font-weight: 500;
+}
+
+/* Metrics */
+.nc-metrics {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 10px; margin-bottom: 1.25rem;
+}
+@media (max-width: 640px) { .nc-metrics { grid-template-columns: repeat(2,1fr); } }
+.nc-metric {
+  background: var(--color-bg);
+  border: 0.5px solid var(--color-border);
+  border-radius: var(--radius-md); padding: 0.9rem 1rem;
+}
+.nc-metric-label {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+  color: var(--color-text-muted); font-family: var(--font-mono); margin-bottom: 4px;
+}
+.nc-metric-value { font-size: 24px; font-weight: 700; line-height: 1.1; }
+.nc-metric-change { font-size: 11px; font-family: var(--font-mono); margin-top: 3px; }
+.nc-metric-change.up { color: var(--color-green); }
+.down { color: var(--color-red);   }
+
+/* Grid */
+.nc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+@media (max-width: 640px) { .nc-grid { grid-template-columns: 1fr; } }
+
+/* Cards */
+.nc-card {
+  background: var(--color-bg);
+  border: 0.5px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: 1rem 1.15rem;
+}
+.nc-card-title {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+  color: var(--color-text-muted); font-family: var(--font-mono); margin-bottom: 12px;
+}
+
+/* Sectors */
+.nc-sector-row { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
+.nc-sector-label {
+  font-size: 12px; flex: 1.4; min-width: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.nc-sector-bar-wrap {
+  flex: 2; height: 6px; background: var(--color-bg-secondary);
+  border-radius: 3px; overflow: hidden;
+}
+.nc-sector-bar { height: 100%; border-radius: 3px; width: 0%; transition: width 1.2s ease; }
+.nc-sector-pct {
+  font-size: 11px; font-family: var(--font-mono);
+  color: var(--color-text-muted); min-width: 34px; text-align: right;
+}
+
+/* Countries */
+.nc-countries { display: flex; flex-direction: column; gap: 6px; }
+.nc-country {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 10px; background: var(--color-bg-secondary); border-radius: var(--radius-md);
+}
+.nc-country-left { display: flex; align-items: center; gap: 8px; }
+.nc-flag { font-size: 18px; }
+.nc-country-name { font-size: 13px; font-weight: 500; }
+.nc-country-gdp { font-size: 11px; color: var(--color-text-muted); font-family: var(--font-mono); }
+.nc-country-right { text-align: right; }
+.nc-country-growth { font-size: 13px; font-weight: 500; }
+.nc-country-rank { font-size: 11px; color: var(--color-text-muted); font-family: var(--font-mono); }
+
+/* AI Section */
+.nc-ai-section {
+  background: var(--color-bg); border: 0.5px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: 1rem 1.15rem; margin-bottom: 12px;
+}
+.nc-ai-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+}
+.nc-ai-label {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+  color: var(--color-text-muted); font-family: var(--font-mono);
+}
+.nc-ai-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--color-green); animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+.nc-ai-model { font-size: 11px; color: var(--color-text-hint); font-family: var(--font-mono); }
+.nc-ai-prompt { display: flex; gap: 8px; margin-bottom: 12px; }
+.nc-ai-input {
+  flex: 1; padding: 9px 14px;
+  border: 0.5px solid var(--color-border-hover);
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans); font-size: 13px;
+  background: var(--color-bg-secondary); color: var(--color-text);
+  outline: none; transition: border-color 0.15s;
+}
+.nc-ai-input:focus { border-color: var(--color-green); }
+.nc-ai-btn {
+  display: flex; align-items: center; gap: 5px;
+  padding: 9px 16px; background: var(--color-green); color: #fff;
+  border: none; border-radius: var(--radius-md);
+  font-family: var(--font-sans); font-size: 13px; font-weight: 500;
+  cursor: pointer; white-space: nowrap; transition: background 0.15s, transform 0.1s;
+}
+.nc-ai-btn:hover  { background: var(--color-green-dark); }
+.nc-ai-btn:active { transform: scale(0.97); }
+.nc-ai-btn:disabled { opacity: 0.5; cursor: default; }
+.nc-ai-response {
+  font-size: 13px; line-height: 1.65;
+  color: var(--color-text); min-height: 44px;
+}
+.nc-ai-placeholder { color: var(--color-text-muted); }
+.nc-ai-loading { display: flex; gap: 4px; align-items: center; padding: 6px 0; }
+.nc-ai-loading span {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--color-green); animation: bounce 1.2s infinite;
+}
+.nc-ai-loading span:nth-child(2) { animation-delay: 0.2s; }
+.nc-ai-loading span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce { 0%,80%,100%{transform:scale(0.5)} 40%{transform:scale(1)} }
+
+/* Opportunities */
+.nc-opportunities { display: flex; flex-direction: column; gap: 6px; }
+.nc-opp {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 9px 10px; background: var(--color-bg-secondary); border-radius: var(--radius-md);
+}
+.nc-opp-icon {
+  width: 30px; height: 30px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.nc-opp-title { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+.nc-opp-meta { font-size: 11px; color: var(--color-text-muted); font-family: var(--font-mono); }
+
+/* Footer */
+.nc-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 1rem; border-top: 0.5px solid var(--color-border);
+  flex-wrap: wrap; gap: 8px;
+}
+.nc-footer-left, .nc-footer-right {
+  font-size: 11px; color: var(--color-text-hint); font-family: var(--font-mono);
+}
+
+.nc-ai-copy {
+  margin-bottom: 12px;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}

@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollAnimations();
   initCounters();
   initFormValidation();
+  initTransactionTracker();
   initAllocBars();
   initBackToTop();
   initCookieConsent();
@@ -49,7 +50,7 @@ function initActiveNav() {
 /* ══════════════════════════════════════ FEATURE 3 — SCROLL FADE-IN ANIMATIONS ══════════════════════════════════════ */
 function initScrollAnimations() {
   const targets = document.querySelectorAll(
-    '.stat, .v-card, .why-card, .mv-card, .vertical-card, .founder-section, .cta-strip, .section-header'
+    '.stat, .v-card, .why-card, .mv-card, .vertical-card, .founder-section, .cta-strip, .section-header, .nc-metric, .nc-card, .nc-ai-section'
   );
 
   targets.forEach((el, i) => {
@@ -220,10 +221,10 @@ function initFormValidation() {
   });
 }
 
-function setSubmitButtonState(button, sending) {
+function setSubmitButtonState(button, sending, activeText = 'Sending…', idleText = 'Send Message') {
   if (!button) return;
   button.disabled = sending;
-  button.textContent = sending ? 'Sending…' : 'Send Message';
+  button.textContent = sending ? activeText : idleText;
 }
 
 function validateEmail(email) {
@@ -278,6 +279,132 @@ function showSuccess() {
       <p>Thank you for your interest in NiLe Capital Fund. Clever Gwakabale will be in touch within 24 hours.</p>
     </div>
   `;
+}
+
+function initTransactionTracker() {
+  const form = document.getElementById('transaction-form');
+  if (!form) return;
+
+  fetchTransactions();
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    clearTrackerMessage();
+
+    const data = {
+      phone: form.phone.value.trim(),
+      amount: form.amount.value.trim(),
+      direction: form.direction.value,
+      provider: form.provider.value.trim(),
+      note: form.note.value.trim(),
+    };
+
+    if (!data.phone) {
+      showTrackerMessage('Please enter a phone number.', true);
+      return;
+    }
+    if (!data.amount || isNaN(Number(data.amount))) {
+      showTrackerMessage('Please enter a valid amount.', true);
+      return;
+    }
+    if (!data.direction) {
+      showTrackerMessage('Please choose a transaction type.', true);
+      return;
+    }
+
+setSubmitButtonState(form.querySelector('button[type="submit"]'), true, 'Saving…', 'Save Transaction');
+
+    try {
+      const response = await fetch(getTransactionApiUrl('/api/transactions'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const payload = await response.json();
+      if (!response.ok) {
+        throw new Error(payload.error || 'Unable to save transaction.');
+      }
+
+      form.reset();
+      showTrackerMessage('Transaction saved successfully.', false);
+      fetchTransactions();
+    } catch (error) {
+      console.error('Transaction save error:', error);
+      showTrackerMessage('Could not save transaction. Please try again.', true);
+    } finally {
+      setSubmitButtonState(form.querySelector('button[type="submit"]'), false, 'Saving…', 'Save Transaction');
+    }
+  });
+}
+
+function getTransactionApiUrl(path) {
+  const baseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5000'
+    : '';
+  return `${baseUrl}${path}`;
+}
+
+async function fetchTransactions() {
+  const list = document.getElementById('transaction-list');
+  if (!list) return;
+  list.innerHTML = '<p class="muted">Loading transaction history...</p>';
+
+  try {
+    const response = await fetch(getTransactionApiUrl('/api/transactions'));
+    const transactions = await response.json();
+
+    if (!response.ok) {
+      throw new Error(transactions.error || 'Error loading transactions.');
+    }
+
+    renderTransactionList(transactions);
+  } catch (error) {
+    console.error('Transaction fetch error:', error);
+    list.innerHTML = '<p class="muted">Unable to load transactions at this time.</p>';
+  }
+}
+
+function renderTransactionList(transactions) {
+  const list = document.getElementById('transaction-list');
+  if (!list) return;
+
+  if (!Array.isArray(transactions) || transactions.length === 0) {
+    list.innerHTML = '<p class="muted">No transactions have been recorded yet.</p>';
+    return;
+  }
+
+  const rows = transactions.slice(0, 8).map(tx => {
+    const date = new Date(tx.created_at).toLocaleString(undefined, {
+      year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+    });
+    return `
+      <div class="transaction-row">
+        <div>
+          <strong>${tx.phone}</strong> · ${tx.provider || 'Unknown provider'}
+          <div class="transaction-meta">${date} · ${tx.direction.toUpperCase()}</div>
+        </div>
+        <div class="transaction-amount">${tx.direction === 'out' ? '-' : '+'} ${Number(tx.amount).toLocaleString()}</div>
+      </div>
+      <p class="transaction-note">${tx.note || '—'}</p>
+    `;
+  }).join('');
+
+  list.innerHTML = rows;
+}
+
+function showTrackerMessage(message, isError) {
+  const msg = document.getElementById('tracker-message');
+  if (!msg) return;
+  msg.textContent = message;
+  msg.className = `tracker-message ${isError ? 'error' : 'success'}`;
+}
+
+function clearTrackerMessage() {
+  const msg = document.getElementById('tracker-message');
+  if (!msg) return;
+  msg.textContent = '';
+  msg.className = 'tracker-message';
 }
 
 /* ══════════════════════════════════════ FEATURE 6 — COOKIE CONSENT BANNER ══════════════════════════════════════ */

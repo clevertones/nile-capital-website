@@ -136,3 +136,23 @@ npm start
 
 Important: Do NOT commit your real API key to the repository. Use environment variables and a secure host for production.
 
+## Live intelligence feed
+
+The intelligence page now refreshes from `/api/intelligence-data` and polls for updates automatically.
+
+1. Run the Node server so the endpoint is available:
+
+```bash
+npm start
+```
+
+2. Configure remote JSON feeds in `.env` if you have them:
+
+```bash
+INTELLIGENCE_SOURCE_URLS=https://source1.example/data.json,https://source2.example/data.json
+```
+
+3. Each source should return either `{ "chart": { "labels": [...], "values": [...], "colors": [...] } }` or the chart object directly.
+
+If no remote source is configured, the endpoint falls back to `data/intelligence-data.json` so the page still renders locally.
+

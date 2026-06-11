@@ -1,0 +1,4 @@
+body { font-family: Arial, Helvetica, sans-serif; background:#f7f7f7; color:#222; }
+.App { background:#fff; padding:20px; border-radius:6px; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+input, select, button { padding:8px; font-size:14px; border:1px solid #ddd; border-radius:4px; }
+button { cursor:pointer; background:#0078d4; color:#fff; border:none; }

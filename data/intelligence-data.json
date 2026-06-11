@@ -1,0 +1,9 @@
+{
+  "chart": {
+    "labels": ["2019", "2020", "2021", "2022", "2023", "2024"],
+    "values": [0.4, 0.6, 1.1, 1.8, 2.9, 3.6],
+    "colors": ["#9FE1CB", "#9FE1CB", "#5DCAA5", "#5DCAA5", "#1D9E75", "#0F6E56"],
+    "source": "World Bank, IMF, GSMA, Partech Africa",
+    "lastUpdated": "2025-01-01"
+  }
+}

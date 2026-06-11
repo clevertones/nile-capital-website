@@ -1,0 +1,153 @@
+.App {
+  font-family: Arial, sans-serif;
+  background: #f7f9fb;
+  color: #1a1a1a;
+}
+
+.transaction-form,
+.summary-panel,
+.transactions-panel,
+.vat-summary-panel {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+}
+
+.transaction-form {
+  display: grid;
+  gap: 10px;
+}
+
+.transaction-form input,
+.transaction-form select {
+  width: 100%;
+}
+
+.row-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+button {
+  padding: 10px 16px;
+  background: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1664c1;
+}
+
+.transaction-table,
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.transaction-table th,
+.transaction-table td,
+.summary-table th,
+.summary-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.transactions-header,
+.vat-summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.vat-controls label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wallet-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.wallet-card {
+  background: #f1fafb;
+  border: 1px solid #d3e8ed;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+button {
+  padding: 10px 16px;
+  background: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1664c1;
+}
+
+.muted {
+  color: #5a5a5a;
+  margin: 0;
+}
+
+.api-snippet {
+  background: #f4f7ff;
+  border: 1px solid #d1d9f0;
+  border-radius: 10px;
+  padding: 14px;
+  font-family: 'Courier New', monospace;
+  white-space: pre-wrap;
+  margin-top: 10px;
+}
+
+.partner-panel {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+}
+
+.summary-row {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+input,
+select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+@media (max-width: 680px) {
+  .summary-row,
+  .transactions-header,
+  .vat-summary-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

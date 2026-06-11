@@ -1,0 +1,6 @@
+__pycache__/
+*.py[cod]
+transactions.db
+.env
+*.env
+.dockerignore

@@ -1,20 +1,13 @@
-# Node modules (if you use npm)
+# Python
+__pycache__/
+*.pyc
+.venv/
+# Node
 node_modules/
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Build files
-dist/
 build/
-
-# Environment variables
+# OS
+.DS_Store
+.vscode/
+# Local env
 .env
-.env.local
+transactions.db

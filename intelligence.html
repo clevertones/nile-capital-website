@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nile Capital - East Africa Investment Intelligence</title>
+  <meta name="description" content="A live East Africa investment intelligence page for Nile Capital." />
+  <meta name="keywords" content="East Africa investment intelligence, Nile Capital, fintech, venture capital" />
+  <meta name="author" content="Clever Gwakabale" />
+  <meta property="og:title" content="Nile Capital - East Africa Investment Intelligence" />
+  <meta property="og:description" content="Track market signals, high-conviction sectors, and live opportunities across East Africa." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://nilecapital.com/intelligence.html" />
+  <link rel="canonical" href="https://nilecapital.com/intelligence.html" />
+  <script>
+    (function(){
+      try {
+        var consent = localStorage.getItem('nile_cookie_consent');
+        if (consent !== 'accepted') {
+          window['ga-disable-G-HH4CZYWJXX'] = true;
+        }
+      } catch(e){}
+    })();
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HH4CZYWJXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-HH4CZYWJXX', { 'anonymize_ip': true });
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/style.css?v=5" />
+  <link rel="stylesheet" href="css/intelligence.css?v=1" />
+</head>
+<body class="nc-page" data-page="intelligence" data-nile-mode="intelligence">
+  <nav class="navbar">
+    <div class="logo">Ni<span>L</span>e Capital</div>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html" data-link="home">Home</a></li>
+      <li><a href="about.html" data-link="about">About</a></li>
+      <li><a href="strategy.html" data-link="strategy">Strategy</a></li>
+      <li><a href="intelligence.html" data-link="intelligence">Intelligence</a></li>
+      <li><a href="legal.html" data-link="legal">Legal</a></li>
+      <li><a href="our-products.html" data-link="products">Our Products</a></li>
+      <li><a href="contact.html" data-link="contact">Contact</a></li>
+      <li><a href="contact.html" class="btn-invest">Invest With Us</a></li>
+    </ul>
+  </nav>
+
+  <main class="nc-root">
+    <header class="nc-header">
+      <div class="nc-logo">
+        <div class="nc-logo-mark" aria-hidden="true">
+          <img src="images/logo.svg" alt="Nile Capital logo" />
+        </div>
+        <div>
+          <div class="nc-logo-text">Nile Capital</div>
+          <div class="nc-logo-sub">East Africa Intelligence</div>
+        </div>
+      </div>
+      <span class="nc-badge">Live | <span id="clock">--:--</span></span>
+    </header>
+
+    <section class="nc-metrics" aria-label="Key market metrics">
+      <div class="nc-metric">
+        <div class="nc-metric-label">EA Market Cap</div>
+        <div class="nc-metric-value">$847B</div>
+        <div class="nc-metric-change up">Up 12.4% YoY</div>
+      </div>
+      <div class="nc-metric">
+        <div class="nc-metric-label">Fintech Deals</div>
+        <div class="nc-metric-value">214</div>
+        <div class="nc-metric-change up">Up 38% in 2024</div>
+      </div>
+      <div class="nc-metric">
+        <div class="nc-metric-label">Mobile Money</div>
+        <div class="nc-metric-value">$1.2T</div>
+        <div class="nc-metric-change up">Up 22% volume</div>
+      </div>
+      <div class="nc-metric">
+        <div class="nc-metric-label">VC Inflow</div>
+        <div class="nc-metric-value">$3.6B</div>
+        <div class="nc-metric-change up">Up 19% Q1 2025</div>
+      </div>
+    </section>
+
+    <section class="nc-grid">
+      <div class="nc-card">
+        <div class="nc-card-title">Sector opportunity index</div>
+        <div id="sectors"></div>
+      </div>
+      <div class="nc-card">
+        <div class="nc-card-title">Country growth ranking</div>
+        <div class="nc-countries" id="countries"></div>
+      </div>
+    </section>
+
+    <section class="nc-ai-section" aria-label="AI market analyst">
+      <div class="nc-ai-header">
+        <div class="nc-ai-label">
+          <div class="nc-ai-dot"></div>
+          Nile market analyst mode
+        </div>
+        <div class="nc-ai-model">shared assistant</div>
+      </div>
+      <p class="nc-ai-copy">
+        Use the shared Nile assistant in the corner of the page. On this screen, Nile automatically switches to a market-analyst prompt so it can interpret the dashboard, compare sectors, and explain the opportunity set.
+      </p>
+      <button class="nc-ai-btn" id="open-nile-widget" type="button">
+        Open Nile assistant <i class="ti ti-arrow-up-right"></i>
+      </button>
+    </section>
+
+    <section class="nc-card" style="margin-bottom:16px">
+      <div class="nc-card-title">Live opportunities pipeline</div>
+      <div class="nc-opportunities" id="opportunities"></div>
+    </section>
+
+    <section class="nc-card nc-chart-card" style="margin-bottom:16px">
+      <div class="nc-card-title">East Africa fintech VC investment ($B)</div>
+      <div class="nc-chart-wrap">
+        <canvas id="trendChart"></canvas>
+      </div>
+    </section>
+
+    <footer class="nc-footer nc-chart-footer">
+      <div class="nc-footer-left">Data: World Bank, IMF, GSMA, Partech Africa, 2024-2025</div>
+      <div class="nc-footer-right">&copy; 2025 Nile Capital</div>
+    </footer>
+  </main>
+
+    <div id="nile-chat-launcher">
+      <div id="nile-chat-window" class="hidden" role="dialog" aria-label="Nile chat assistant">
+        <div id="nile-chat-header">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M8 30 L24 38 L40 30 L36 24 L12 24 Z" fill="rgba(255,255,255,0.9)"/>
+            <path d="M24 10 L24 24 L34 24 Z" fill="rgba(255,255,255,0.7)"/>
+            <path d="M24 10 L24 24 L14 24 Z" fill="rgba(255,255,255,0.55)"/>
+            <line x1="24" y1="8" x2="24" y2="24" stroke="rgba(255,255,255,0.9)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M6 36 Q24 44 42 36" stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div class="nile-header-info"><div class="name">Nile</div><div class="status">NiLe Capital Assistant · Market Analyst</div></div>
+          <button id="nile-close-btn" aria-label="Close chat">✕</button>
+        </div>
+        <div id="nile-chat-messages" aria-live="polite"></div>
+        <div id="nile-chat-input-area">
+          <input id="nile-chat-input" type="text" placeholder="Ask me anything…" autocomplete="off" aria-label="Type your message" />
+          <button id="nile-send-btn" aria-label="Send message">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+        <div id="nile-chat-footer">Powered by NiLe Capital · AI Assistant</div>
+      </div>
+      <div id="nile-intro-card" class="hidden">
+        <button class="intro-dismiss" id="nile-intro-dismiss" aria-label="Dismiss">✕</button>
+        <div class="intro-title">👋 Hi, I'm Nile!</div>
+        <div class="intro-body">Your NiLe Capital AI assistant. On this page I'm in market analyst mode.</div>
+        <button class="intro-cta" id="nile-intro-cta">Start a conversation →</button>
+      </div>
+      <div id="nile-launcher-row">
+        <div id="nile-label-tag" role="button" tabindex="0" aria-label="Open Nile chat"><span class="label-name">Nile</span><span class="label-sub"><span class="label-dot"></span>Market Analyst · Online</span></div>
+        <button id="nile-chat-bubble" aria-label="Open Nile chat assistant"><span id="nile-unread-badge" class="hidden">1</span>
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 30 L24 38 L40 30 L36 24 L12 24 Z" fill="white"/><path d="M24 10 L24 24 L34 24 Z" fill="rgba(255,255,255,0.8)"/><path d="M24 10 L24 24 L14 24 Z" fill="rgba(255,255,255,0.6)"/><line x1="24" y1="8" x2="24" y2="24" stroke="white" stroke-width="1.8" stroke-linecap="round"/><path d="M6 36 Q24 43 42 36" stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/chart.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/nile-chat.js"></script>
+</body>
+</html>

@@ -1,21 +1,18 @@
-<!-- This tells the browser this is an HTML5 document -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NiLe Capital Fund — Flow. Grow. Prosper.</title>
-  <!-- SEO Meta Tags -->
-  <meta name="description" content="NiLe Capital Fund — A technology-forward private capital fund investing in Africa's highest-growth sectors.">
-  <meta name="keywords" content="Africa investment fund, private equity Tanzania, East Africa capital, NiLe Capital">
+  <title>Our Products — NiLe Capital Fund</title>
+  <meta name="description" content="Explore NiLe Capital's products, including the Mobile Money Tracker and future tools.">
+  <meta name="keywords" content="NiLe Capital products, mobile money tracker, fintech tools, investor products">
   <meta name="author" content="Clever Gwakabale">
-  <meta property="og:title" content="NiLe Capital Fund — Flow. Grow. Prosper.">
-  <meta property="og:description" content="Investing in Africa's highest-growth sectors with transparency and technology.">
+  <meta property="og:title" content="Our Products — NiLe Capital Fund">
+  <meta property="og:description" content="Explore NiLe Capital's products, including the Mobile Money Tracker and future tools.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://nilecapital.com">
-  <link rel="canonical" href="https://nilecapital.com">
-  <!-- Analytics (consent-aware) -->
+  <meta property="og:url" content="https://nilecapital.com/our-products.html">
+  <link rel="canonical" href="https://nilecapital.com/our-products.html">
   <script>
     (function(){
       try {
@@ -29,7 +26,7 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-HH4CZYWJXX"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);} 
+    function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-HH4CZYWJXX', { 'anonymize_ip': true });
   </script>
@@ -39,9 +36,8 @@
   <link rel="stylesheet" href="css/style.css?v=4">
 </head>
 
-<body data-page="home">
+<body data-page="products">
 
-  <!-- NAVIGATION BAR -->
   <nav class="navbar">
     <div class="logo">Ni<span>L</span>e Capital</div>
     <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -54,79 +50,69 @@
       <li><a href="intelligence.html" data-link="intelligence">Intelligence</a></li>
       <li><a href="legal.html" data-link="legal">Legal</a></li>
       <li><a href="our-products.html" data-link="products">Our Products</a></li>
-      <li><a href="contact.html" data-link="contact">Contact</a></li>
       <li><a href="contact.html" class="btn-invest">Invest With Us</a></li>
     </ul>
   </nav>
 
-  <!-- HERO SECTION -->
-  <section class="hero">
-    <div class="hero-particles">
-      <div class="particle"></div>
-      <div class="particle"></div>
-      <div class="particle"></div>
+  <section class="section-header">
+    <span class="eyebrow">OUR PRODUCTS</span>
+    <h1>Mobile Money Tracker</h1>
+    <p>Track incoming and outgoing mobile money activity with a simple, dedicated tool.</p>
+  </section>
+
+  <section class="tracker">
+    <div class="section-header">
+      <span class="eyebrow">TRACKER</span>
+      <h2>Transaction dashboard</h2>
+      <p>Record payments and withdrawals in one dedicated place with instant access to your latest entries.</p>
     </div>
-    <div class="hero-content">
-      <span class="eyebrow hero-eyebrow">NiLe Capital Fund I — Now Open</span>
-      <h1>Flow. Grow. Prosper.</h1>
-      <p>A technology-forward private capital fund investing in Africa's highest-growth sectors.</p>
-      <div class="hero-buttons">
-        <a href="contact.html" class="btn-primary">Explore Fund I</a>
-        <a href="about.html" class="btn-secondary">Learn More</a>
+
+    <div class="tracker-grid">
+      <form id="transaction-form" class="tracker-form" novalidate>
+        <input type="tel" name="phone" class="form-input" placeholder="Phone Number" required>
+        <input type="number" name="amount" class="form-input" placeholder="Amount (TZS)" step="0.01" required>
+        <select name="direction" class="form-input" required>
+          <option value="" disabled selected>Transaction Type</option>
+          <option value="in">Incoming</option>
+          <option value="out">Outgoing</option>
+        </select>
+        <input type="text" name="provider" class="form-input" placeholder="Provider (e.g. M-Pesa, Tigo Pesa)">
+        <textarea name="note" class="form-input" rows="3" placeholder="Purpose or note"></textarea>
+        <button type="submit" class="btn-primary">Save Transaction</button>
+        <div id="tracker-message" class="tracker-message" aria-live="polite"></div>
+      </form>
+
+      <div class="tracker-card">
+        <h3>Recent Transactions</h3>
+        <div id="transaction-list" class="transaction-list">
+          <p class="muted">Loading transaction history...</p>
+        </div>
       </div>
     </div>
-    <div class="hero-waves">
-      <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
-        <path class="wave1" d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z"/>
-        <path class="wave2" d="M0,50 C180,20 360,70 540,45 C720,20 900,65 1080,40 C1260,15 1380,55 1440,50 L1440,80 L0,80 Z"/>
-      </svg>
-    </div>
-    <div class="scroll-indicator"><span>Scroll</span><div class="scroll-arrow">↓</div></div>
   </section>
 
-  <!-- INVESTMENT VERTICALS -->
-  <section class="verticals">
+  <section class="contact contact-info">
     <div class="section-header">
-      <span class="eyebrow">WHERE WE INVEST</span>
-      <h2>Four High-Conviction Verticals</h2>
-      <p>Strategically selected for maximum growth potential across East Africa</p>
+      <span class="eyebrow">CONTACT</span>
+      <h2>Need help?</h2>
+      <p>Reach out for investor support or questions about your tracker data.</p>
     </div>
-    <div class="verticals-grid">
-      <div class="v-card"><div class="v-icon">🖥</div><div class="v-alloc">35%</div><h3>Technology &amp; Fintech</h3><p>SaaS platforms, mobile finance, AI applications and digital infrastructure</p></div>
-      <div class="v-card"><div class="v-icon">🌾</div><div class="v-alloc">25%</div><h3>Agritech</h3><p>Food systems, supply chain optimisation and agricultural finance</p></div>
-      <div class="v-card"><div class="v-icon">⚡</div><div class="v-alloc">25%</div><h3>Infrastructure</h3><p>Renewable energy, logistics networks and essential telecoms</p></div>
-      <div class="v-card"><div class="v-icon">🏢</div><div class="v-alloc">15%</div><h3>Real Estate</h3><p>Grade-A commercial property and REIT-structured assets</p></div>
-    </div>
-  </section>
-
-  <!-- WHY NILE -->
-  <section class="why-nile">
-    <div class="section-header light"><span class="eyebrow">WHY CHOOSE US</span><h2>The NiLe Advantage</h2><p>What makes us different from every other fund</p></div>
-    <div class="why-grid">
-      <div class="why-card"><div class="why-num">01</div><h3>Technology-Driven</h3><p>AI-powered deal sourcing and real-time investor dashboards give you visibility other funds don't offer.</p></div>
-      <div class="why-card"><div class="why-num">02</div><h3>Radical Transparency</h3><p>Quarterly reports, independent audits and live portfolio data. No surprises, ever.</p></div>
-      <div class="why-card"><div class="why-num">03</div><h3>Africa-First Focus</h3><p>Deep regional expertise and on-the-ground networks across East and Central Africa.</p></div>
+    <div class="contact-info">
+      <p><strong>Email:</strong> ceo.nilecapital@gmail.com</p>
+      <p><strong>Phone:</strong> +255 768 736 334</p>
+      <a href="contact.html" class="btn-primary" style="margin-top: 16px; display: inline-block;">Contact Us</a>
     </div>
   </section>
 
-  <!-- CTA STRIP -->
-  <section class="cta-strip"><div class="cta-content"><h2>Ready to invest in Africa's future?</h2><p>Join NiLe Capital Fund I. Minimum commitment $25,000. Open to accredited investors.</p><a href="contact.html" class="btn-primary">Get In Touch</a></div></section>
-
-  <!-- STATS -->
-  <section class="stats">
-    <div class="stat"><h2><span class="counter" data-target="20" data-prefix="$" data-suffix="M">0</span></h2><p>Fund I Target</p></div>
-    <div class="stat"><h2><span class="counter" data-target="22" data-suffix="%">0</span></h2><p>Target IRR</p></div>
-    <div class="stat"><h2><span class="counter" data-target="4">0</span></h2><p>Investment Verticals</p></div>
-    <div class="stat"><h2><span class="counter" data-target="7" data-suffix="yr">0</span></h2><p>Fund Life</p></div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer><p>© 2026 NiLe Capital Fund Limited · ceo.nilecapital@gmail.com · +255 768 736 334</p><p style="margin-top:8px;font-size:11px"><a href="legal.html" style="color:#5DCAA5;text-decoration:none">Legal Disclaimer</a> · This is not an offer to sell securities. For accredited investors only.</p></footer>
+  <footer>
+    <p>© 2026 NiLe Capital Fund Limited · ceo.nilecapital@gmail.com · +255 768 736 334</p>
+    <p style="margin-top:8px;font-size:11px">
+      <a href="legal.html" style="color:#5DCAA5;text-decoration:none">Legal Disclaimer</a> · This is not an offer to sell securities. For accredited investors only.
+    </p>
+  </footer>
 
   <button id="back-to-top" aria-label="Back to top">↑</button>
   <script src="js/main.js"></script>
-
-  <!-- NILE CHATBOT WIDGET -->
   <div id="nile-chat-launcher">
     <div id="nile-chat-window" class="hidden" role="dialog" aria-label="Nile chat assistant">
       <div id="nile-chat-header">
@@ -162,11 +148,6 @@
       </button>
     </div>
   </div>
-
   <script src="js/nile-chat.js"></script>
-
 </body>
 </html>
-
-
-
