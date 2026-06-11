@@ -173,11 +173,33 @@ body.nc-page h4 {
 }
 .nc-country-left { display: flex; align-items: center; gap: 8px; }
 .nc-flag { font-size: 18px; }
-.nc-country-name { font-size: 13px; font-weight: 500; }
-.nc-country-gdp { font-size: 11px; color: var(--color-text-muted); font-family: var(--font-mono); }
+.nc-country-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+.nc-country-gdp {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+}
 .nc-country-right { text-align: right; }
-.nc-country-growth { font-size: 13px; font-weight: 500; }
-.nc-country-rank { font-size: 11px; color: var(--color-text-muted); font-family: var(--font-mono); }
+.nc-country-growth {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+.nc-country-rank {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+}
+.nc-country-copy {
+  margin: 0 0 10px 0;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
 
 /* AI Section */
 .nc-ai-section {
