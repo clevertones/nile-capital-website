@@ -1253,10 +1253,6 @@ body.nc-page h4 {
   color: inherit;
 }
 
-body.nc-page #nile-chat-launcher {
-  display: none;
-}
-
 .nc-root {
   width: min(1240px, calc(100% - 32px));
   margin: 0 auto;
