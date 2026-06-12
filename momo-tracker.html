@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MoMo Tracker — NiLe Capital</title>
+  <meta name="description" content="MoMo Tracker is the Nile Capital mobile money operations page, previewing the signup flow, dashboard, and ledger built so far." />
+  <meta name="keywords" content="MoMo Tracker, mobile money, Nile Capital, Firebase, agent dashboard" />
+  <meta name="author" content="Clever Gwakabale" />
+  <meta property="og:title" content="MoMo Tracker — NiLe Capital" />
+  <meta property="og:description" content="Preview the MoMo Tracker page and dashboard concept built for Nile Capital." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://nilecapital.com/momo-tracker.html" />
+  <link rel="canonical" href="https://nilecapital.com/momo-tracker.html" />
+  <script>
+    (function(){
+      try {
+        var consent = localStorage.getItem('nile_cookie_consent');
+        if (consent !== 'accepted') {
+          window['ga-disable-G-HH4CZYWJXX'] = true;
+        }
+      } catch(e){}
+    })();
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HH4CZYWJXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);} 
+    gtag('js', new Date());
+    gtag('config', 'G-HH4CZYWJXX', { 'anonymize_ip': true });
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css?v=4" />
+  <link rel="stylesheet" href="css/momo-tracker.css?v=1" />
+</head>
+<body data-page="momo-tracker">
+  <nav class="navbar">
+    <div class="logo">Ni<span>L</span>e Capital</div>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html" data-link="home">Home</a></li>
+      <li><a href="about.html" data-link="about">About</a></li>
+      <li><a href="strategy.html" data-link="strategy">Strategy</a></li>
+      <li><a href="intelligence.html" data-link="intelligence">Intelligence</a></li>
+      <li><a href="momo-tracker.html" data-link="momo-tracker">MoMo Tracker</a></li>
+      <li><a href="legal.html" data-link="legal">Legal</a></li>
+      <li><a href="contact.html" data-link="contact">Contact</a></li>
+      <li><a href="contact.html" class="btn-invest">Invest With Us</a></li>
+    </ul>
+  </nav>
+
+  <section class="tracker-hero-banner">
+    <div class="section-header light tracker-hero-copy">
+      <span class="eyebrow">MO MO OPERATIONS</span>
+      <h1>MoMo Tracker</h1>
+      <p>A Nile Capital page for the mobile money workflow we have built so far: agent signup, trial confirmation, protected dashboard access, and transaction tracking.</p>
+      <div class="hero-buttons tracker-actions">
+        <a href="mobile-money-tracker/build/index.html" class="btn-primary">Open live tracker</a>
+        <a href="#preview" class="btn-secondary">See the preview</a>
+      </div>
+    </div>
+
+    <aside class="tracker-status-card">
+      <div class="status-head">
+        <span class="status-pill">Prototype</span>
+        <span class="status-pill gold">Firebase ready</span>
+      </div>
+      <ul class="status-list">
+        <li><strong>Auth</strong><span>Login, signup, and protected routes</span></li>
+        <li><strong>Network selection</strong><span>Button grid for M-Pesa, Airtel Money, Mix by Yass, and Tigo Pesa</span></li>
+        <li><strong>Tracker flow</strong><span>Dashboard, ledger, and starter transaction cards</span></li>
+        <li><strong>Agent access</strong><span>Open the tracker build directly from this page</span></li>
+      </ul>
+    </aside>
+  </section>
+
+  <section id="preview" class="tracker-preview-shell">
+    <div class="section-header preview-header">
+      <span class="eyebrow">VISUAL PREVIEW</span>
+      <h2>What we have built so far</h2>
+      <p>These panels mirror the current React app structure so you can scan the product in the Nile Capital site itself.</p>
+    </div>
+
+    <div class="tracker-preview-grid">
+      <article class="tracker-preview-card signup-preview">
+        <div class="preview-card-head">
+          <span>Step 1</span>
+          <strong>Agent details</strong>
+        </div>
+        <div class="preview-fields">
+          <div class="preview-field full-width"></div>
+          <div class="preview-field full-width"></div>
+          <div class="preview-field full-width"></div>
+          <div class="network-grid preview-network-grid">
+            <div class="network-chip-preview selected">M-Pesa</div>
+            <div class="network-chip-preview">Airtel Money</div>
+            <div class="network-chip-preview">Mix by Yass</div>
+            <div class="network-chip-preview">Tigo Pesa</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="tracker-preview-card confirmation-preview">
+        <div class="preview-card-head">
+          <span>Step 2</span>
+          <strong>Confirm trial</strong>
+        </div>
+        <div class="confirmation-box">
+          <div><span>Name</span><strong>Agent name</strong></div>
+          <div><span>Email</span><strong>agent@nilecapital.com</strong></div>
+          <div><span>Network</span><strong>M-Pesa</strong></div>
+          <button type="button" class="btn-primary btn-wide">Start Free Trial</button>
+        </div>
+      </article>
+
+      <article class="tracker-preview-card dashboard-preview">
+        <div class="preview-card-head">
+          <span>Dashboard</span>
+          <strong>Protected access</strong>
+        </div>
+        <div class="dashboard-mini-grid">
+          <div><span>Plan</span><strong>Trial</strong></div>
+          <div><span>Days left</span><strong>30</strong></div>
+          <div><span>Network</span><strong>M-Pesa</strong></div>
+        </div>
+          <div class="dashboard-mini-cta">
+          <a href="mobile-money-tracker/build/index.html" class="btn-secondary">Open tracker</a>
+          <a href="mobile-money-tracker/build/index.html#/login" class="btn-secondary">Sign in flow</a>
+        </div>
+      </article>
+
+      <article class="tracker-preview-card ledger-preview wide-card">
+        <div class="preview-card-head">
+          <span>Ledger</span>
+          <strong>Starter entries</strong>
+        </div>
+        <div class="ledger-preview-list">
+          <div class="ledger-preview-row">
+            <span>INV-2026-018</span>
+            <strong>TZS 420,000</strong>
+          </div>
+          <div class="ledger-preview-row">
+            <span>OPS-2026-044</span>
+            <strong>TZS 185,000</strong>
+          </div>
+          <div class="ledger-preview-row">
+            <span>RET-2026-129</span>
+            <strong>TZS 98,000</strong>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="tracker-next-steps">
+    <div class="section-header light">
+      <span class="eyebrow">NEXT STEP</span>
+      <h2>What is ready for the next phase</h2>
+      <p>Connect the Firebase project, point the tracker pages to live collections, and turn this preview into the interactive app experience.</p>
+    </div>
+    <div class="next-step-grid">
+      <article class="next-step-card"><h3>1. Firebase config</h3><p>Paste the console config into the tracker app env file.</p></article>
+      <article class="next-step-card"><h3>2. Auth flow</h3><p>Use the login and signup screens to create agents and protect the dashboard.</p></article>
+      <article class="next-step-card"><h3>3. Firestore data</h3><p>Persist transactions and summaries so the ledger becomes live.</p></article>
+    </div>
+  </section>
+
+  <footer><p>© 2026 NiLe Capital Fund Limited · ceo.nilecapital@gmail.com · +255 768 736 334</p></footer>
+  <button id="back-to-top" aria-label="Back to top">↑</button>
+  <script src="js/main.js"></script>
+</body>
+</html>

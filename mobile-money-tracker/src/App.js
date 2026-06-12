@@ -1,235 +1,244 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import { HashRouter, Link, NavLink, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
+import { firebaseReady } from './firebase';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Dashboard from './pages/Dashboard';
+import { useAuth } from './context/AuthContext';
 
-const API_BASE = process.env.REACT_APP_API_URL || '/api';
+const starterTransactions = [
+  { id: 1, type: 'Cash in', network: 'M-Pesa', phone: '255 7XX XXX 501', amount: 420000, reference: 'INV-2026-018', note: 'Investor top-up', time: '8 min ago' },
+  { id: 2, type: 'Payout', network: 'Tigo Pesa', phone: '255 7XX XXX 214', amount: 185000, reference: 'OPS-2026-044', note: 'Supplier settlement', time: '21 min ago' },
+  { id: 3, type: 'Cash in', network: 'Airtel Money', phone: '255 7XX XXX 988', amount: 98000, reference: 'RET-2026-129', note: 'Retail collections', time: '1 hr ago' },
+];
+
+const featureCards = [
+  { title: 'Live transaction feed', copy: 'Track cash in, cash out, and reference notes from one page designed for fast operator workflows.' },
+  { title: 'Firebase-ready', copy: 'The app is wired with a Firebase helper so Firestore can be connected once the config keys are added.' },
+  { title: 'Built for Nile Capital', copy: 'The visual language follows the site: deep green, gold accents, and a clean investor-grade layout.' },
+];
+
+const setupSteps = [
+  'Set your Firebase env vars in `mobile-money-tracker/.env`.',
+  'Connect Firestore collections for transactions and monthly summaries.',
+  'Swap the local demo list for live data once the backend is ready.',
+];
+
+const networkOptions = ['All networks', 'M-Pesa', 'Tigo Pesa', 'Airtel Money', 'HaloPesa'];
+
+const formatAmount = (value) => new Intl.NumberFormat('en-US').format(value);
+
+function ProtectedRoute({ children }) {
+  const { currentUser, loading } = useAuth();
+
+  if (loading) {
+    return null;
+  }
+
+  return currentUser ? children : <Navigate to="/login" replace />;
+}
 
 function App() {
-  const [txs, setTxs] = useState([]);
-  const [vatSummary, setVatSummary] = useState([]);
-  const [form, setForm] = useState({ phone: '', amount: '', direction: 'in', wallet_type: 'business', provider: '', vat_rate: '0', note: '' });
-  const [walletFilter, setWalletFilter] = useState('all');
-  const [vatYear, setVatYear] = useState(new Date().getFullYear().toString());
-  const [loading, setLoading] = useState(false);
+  return (
+    <HashRouter>
+      <div className="momo-app">
+        <header className="site-header">
+          <Link to="/" className="brand-mark">
+            <span className="brand-kicker">NiLe Capital</span>
+            <span className="brand-name">MoMo Tracker</span>
+          </Link>
 
-  const fetchTxs = async (wallet = walletFilter) => {
-    setLoading(true);
-    const url = wallet === 'all' ? `${API_BASE}/transactions` : `${API_BASE}/transactions?wallet=${wallet}`;
-    const res = await fetch(url);
-    const data = await res.json();
-    setTxs(data);
-    setLoading(false);
-  };
+          <nav className="site-nav" aria-label="MoMo Tracker navigation">
+            <NavLink to="/" end className={({ isActive }) => `site-link ${isActive ? 'active' : ''}`}>Overview</NavLink>
+            <NavLink to="/tracker" className={({ isActive }) => `site-link ${isActive ? 'active' : ''}`}>Tracker</NavLink>
+            <NavLink to="/login" className={({ isActive }) => `site-link ${isActive ? 'active' : ''}`}>Login</NavLink>
+          </nav>
 
-  const fetchVatSummary = async (year = vatYear) => {
-    const res = await fetch(`${API_BASE}/vat-summary?wallet=business&year=${year}`);
-    const data = await res.json();
-    setVatSummary(data);
-  };
+          <div className="status-chip">
+            <span className={firebaseReady ? 'status-dot ready' : 'status-dot'} />
+            {firebaseReady ? 'Firebase ready' : 'Firebase setup pending'}
+          </div>
+        </header>
 
-  useEffect(() => { fetchTxs(); fetchVatSummary(vatYear); }, []);
+        <Routes>
+          <Route path="/" element={<OverviewPage />} />
+          <Route
+            path="/tracker"
+            element={(
+              <ProtectedRoute>
+                <TrackerPage />
+              </ProtectedRoute>
+            )}
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route
+            path="/dashboard"
+            element={(
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            )}
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
+    </HashRouter>
+  );
+}
 
-  const submit = async (e) => {
-    e.preventDefault();
-    await fetch(`${API_BASE}/transactions`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...form, amount: parseFloat(form.amount || 0), vat_rate: parseFloat(form.vat_rate || 0) })
-    });
-    setForm({ phone: '', amount: '', direction: 'in', wallet_type: 'business', provider: '', vat_rate: '0', note: '' });
-    fetchTxs();
-    fetchVatSummary(vatYear);
-  };
-
-  const onWalletFilterChange = async (value) => {
-    setWalletFilter(value);
-    await fetchTxs(value);
-  };
-
-  const onVatYearChange = async (value) => {
-    setVatYear(value);
-    await fetchVatSummary(value);
-  };
-
-  const downloadReport = async (endpoint, filename, includeYear = false) => {
-    let query = walletFilter === 'all' ? '' : `?wallet=${walletFilter}`;
-    if (includeYear) {
-      query += query ? `&year=${vatYear}` : `?year=${vatYear}`;
-    }
-    const response = await fetch(`${API_BASE}/${endpoint}${query}`);
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.URL.revokeObjectURL(url);
-  };
-
-  const summary = txs.reduce((acc, tx) => {
-    const total = acc.total + (tx.direction === 'in' ? tx.amount : -tx.amount);
-    const vat = acc.vat + (tx.vat_amount || 0);
-    const wallets = { ...acc.wallets };
-    wallets[tx.wallet_type] = wallets[tx.wallet_type] || { count: 0, balance: 0, vat: 0 };
-    wallets[tx.wallet_type].count += 1;
-    wallets[tx.wallet_type].balance += tx.direction === 'in' ? tx.amount : -tx.amount;
-    wallets[tx.wallet_type].vat += tx.vat_amount || 0;
-    return { total, vat, wallets };
-  }, { total: 0, vat: 0, wallets: {} });
-
-  const years = [new Date().getFullYear(), new Date().getFullYear() - 1, new Date().getFullYear() - 2];
+function OverviewPage() {
+  const totals = useMemo(() => {
+    const volume = starterTransactions.reduce((sum, item) => sum + item.amount, 0);
+    return { volume, cashIn: 2, cashOut: 1 };
+  }, []);
 
   return (
-    <div className="App" style={{ maxWidth: 960, margin: '0 auto', padding: 20 }}>
-      <h1>Mobile Money Tracker</h1>
+    <main>
+      <section className="hero-grid">
+        <div className="hero-copy panel">
+          <span className="eyebrow">MOBILE MONEY OPERATIONS</span>
+          <h1>MoMo Tracker</h1>
+          <p className="hero-text">
+            A Nile Capital page for tracking mobile money inflows, payouts, and operational notes in one place.
+            This starter is ready to grow into a Firebase-backed workflow.
+          </p>
 
-      <section className="tracker-panel">
-        <h2>New Transaction</h2>
-        <form onSubmit={submit} className="transaction-form">
-          <input placeholder="Phone" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} required />
-          <input placeholder="Amount" type="number" step="0.01" value={form.amount} onChange={e => setForm({ ...form, amount: e.target.value })} required />
-          <div className="row-grid">
-            <select value={form.direction} onChange={e => setForm({ ...form, direction: e.target.value })}>
-              <option value="in">In</option>
-              <option value="out">Out</option>
-            </select>
-            <select value={form.wallet_type} onChange={e => setForm({ ...form, wallet_type: e.target.value })}>
-              <option value="business">Business Wallet</option>
-              <option value="personal">Personal Wallet</option>
-            </select>
-            <input placeholder="VAT Rate (%)" type="number" step="0.01" value={form.vat_rate} onChange={e => setForm({ ...form, vat_rate: e.target.value })} />
+          <div className="hero-actions">
+            <Link to="/tracker" className="btn-primary">Open Tracker</Link>
+            <a href="#/tracker" className="btn-secondary">View transaction page</a>
           </div>
-          <input placeholder="Provider" value={form.provider} onChange={e => setForm({ ...form, provider: e.target.value })} />
-          <input placeholder="Note" value={form.note} onChange={e => setForm({ ...form, note: e.target.value })} />
-          <button type="submit">Add Transaction</button>
-        </form>
+
+          <div className="mini-metrics">
+            <article><span>Monthly volume</span><strong>TZS {formatAmount(totals.volume)}</strong></article>
+            <article><span>Cash in</span><strong>{totals.cashIn}</strong></article>
+            <article><span>Payouts</span><strong>{totals.cashOut}</strong></article>
+          </div>
+        </div>
+
+        <aside className="hero-panel panel">
+          <div className="panel-head"><span className="panel-label">Starter stack</span><span className="panel-badge">React + Firebase</span></div>
+          <ul className="feature-list">
+            {featureCards.map((feature) => (
+              <li key={feature.title}><h3>{feature.title}</h3><p>{feature.copy}</p></li>
+            ))}
+          </ul>
+        </aside>
       </section>
 
-      <section className="summary-panel">
-        <h2>Wallet Summary</h2>
-        <div className="summary-row">
-          <div><strong>Total Balance:</strong> {summary.total.toFixed(2)}</div>
-          <div><strong>Total VAT:</strong> {summary.vat.toFixed(2)}</div>
+      <section className="content-grid">
+        <section className="panel">
+          <div className="panel-head"><span className="panel-label">How it starts</span><span className="panel-badge">Page first</span></div>
+          <div className="step-list">
+            {setupSteps.map((step, index) => (
+              <div className="step-item" key={step}><span>{index + 1}</span><p>{step}</p></div>
+            ))}
+          </div>
+        </section>
+
+        <section className="panel">
+          <div className="panel-head"><span className="panel-label">Recent activity</span><span className="panel-badge">Demo data</span></div>
+          <div className="activity-list">
+            {starterTransactions.map((item) => (
+              <article className="activity-item" key={item.id}>
+                <div><h3>{item.reference}</h3><p>{item.type} · {item.network} · {item.note}</p></div>
+                <strong>TZS {formatAmount(item.amount)}</strong>
+              </article>
+            ))}
+          </div>
+        </section>
+      </section>
+    </main>
+  );
+}
+
+function TrackerPage() {
+  const [transactions, setTransactions] = useState(starterTransactions);
+  const [filter, setFilter] = useState('All networks');
+  const [form, setForm] = useState({ type: 'Cash in', network: 'M-Pesa', phone: '', amount: '', reference: '', note: '' });
+
+  const visibleTransactions = useMemo(() => (filter === 'All networks' ? transactions : transactions.filter((item) => item.network === filter)), [transactions, filter]);
+
+  const metrics = useMemo(() => {
+    const total = transactions.reduce((sum, item) => sum + item.amount, 0);
+    const cashIn = transactions.filter((item) => item.type === 'Cash in').reduce((sum, item) => sum + item.amount, 0);
+    const cashOut = transactions.filter((item) => item.type === 'Payout').reduce((sum, item) => sum + item.amount, 0);
+    return { total, cashIn, cashOut, liveCount: transactions.length };
+  }, [transactions]);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const amount = Number.parseFloat(form.amount || '0');
+    if (!amount || amount <= 0) return;
+
+    const newTransaction = {
+      id: Date.now(),
+      type: form.type,
+      network: form.network,
+      phone: form.phone || 'Unknown phone',
+      amount,
+      reference: form.reference || `MOMO-${Date.now().toString().slice(-5)}`,
+      note: form.note || 'No note added',
+      time: 'Just now',
+    };
+
+    setTransactions((current) => [newTransaction, ...current]);
+    setForm({ type: 'Cash in', network: 'M-Pesa', phone: '', amount: '', reference: '', note: '' });
+  };
+
+  return (
+    <main>
+      <section className="tracker-hero panel">
+        <div>
+          <span className="eyebrow">TRACKER PAGE</span>
+          <h1>Manage mobile money flow with a clean Nile page.</h1>
+          <p>This starter keeps the data model simple now and leaves room for Firestore collections, authenticated roles, and reporting later.</p>
         </div>
-        <div className="wallet-summary-grid">
-          {Object.entries(summary.wallets).map(([wallet, stats]) => (
-            <div key={wallet} className="wallet-card">
-              <h3>{wallet === 'business' ? 'Business Wallet' : 'Personal Wallet'}</h3>
-              <p>Transactions: {stats.count}</p>
-              <p>Balance: {stats.balance.toFixed(2)}</p>
-              <p>VAT: {stats.vat.toFixed(2)}</p>
-            </div>
+
+        <div className="tracker-stats">
+          <article><span>Total volume</span><strong>TZS {formatAmount(metrics.total)}</strong></article>
+          <article><span>Cash in</span><strong>TZS {formatAmount(metrics.cashIn)}</strong></article>
+          <article><span>Payouts</span><strong>TZS {formatAmount(metrics.cashOut)}</strong></article>
+          <article><span>Live entries</span><strong>{metrics.liveCount}</strong></article>
+        </div>
+      </section>
+
+      <section className="tracker-grid">
+        <form className="panel tracker-form" onSubmit={handleSubmit}>
+          <div className="panel-head"><span className="panel-label">New transaction</span><span className="panel-badge">Local demo</span></div>
+
+          <div className="field-grid">
+            <label><span>Type</span><select value={form.type} onChange={(event) => setForm({ ...form, type: event.target.value })}><option>Cash in</option><option>Payout</option></select></label>
+            <label><span>Network</span><select value={form.network} onChange={(event) => setForm({ ...form, network: event.target.value })}><option>M-Pesa</option><option>Tigo Pesa</option><option>Airtel Money</option><option>HaloPesa</option></select></label>
+            <label><span>Phone</span><input value={form.phone} onChange={(event) => setForm({ ...form, phone: event.target.value })} placeholder="255 7XX XXX XXX" /></label>
+            <label><span>Amount</span><input value={form.amount} onChange={(event) => setForm({ ...form, amount: event.target.value })} placeholder="TZS 0" type="number" min="0" step="1" /></label>
+            <label><span>Reference</span><input value={form.reference} onChange={(event) => setForm({ ...form, reference: event.target.value })} placeholder="INV-2026-001" /></label>
+            <label className="span-2"><span>Note</span><input value={form.note} onChange={(event) => setForm({ ...form, note: event.target.value })} placeholder="Purpose, desk, or branch note" /></label>
+          </div>
+
+          <button type="submit" className="btn-primary btn-wide">Add to tracker</button>
+        </form>
+
+        <aside className="panel tracker-side">
+          <div className="panel-head"><span className="panel-label">Firebase roadmap</span><span className="panel-badge">Next step</span></div>
+          <div className="info-card"><h3>Ready for Firestore</h3><p>Once your Firebase project keys are added, this page can save transactions to Firestore and sync them across devices.</p></div>
+          <div className="info-card filter-card"><h3>Network filter</h3><div className="chip-row">{networkOptions.map((option) => (<button key={option} type="button" className={`filter-chip ${filter === option ? 'active' : ''}`} onClick={() => setFilter(option)}>{option}</button>))}</div></div>
+        </aside>
+      </section>
+
+      <section className="panel ledger-panel">
+        <div className="panel-head"><span className="panel-label">Ledger</span><span className="panel-badge">{visibleTransactions.length} records</span></div>
+        <div className="ledger-list">
+          {visibleTransactions.map((item) => (
+            <article className="ledger-row" key={item.id}>
+              <div><h3>{item.reference}</h3><p>{item.type} · {item.network} · {item.phone}</p><span>{item.note}</span></div>
+              <div className="ledger-amount"><strong>{item.type === 'Cash in' ? '+' : '-'}</strong><strong>TZS {formatAmount(item.amount)}</strong><span>{item.time}</span></div>
+            </article>
           ))}
         </div>
       </section>
-
-      <section className="vat-summary-panel">
-        <div className="vat-summary-header">
-          <h2>VAT Summary (TRA / KRA)</h2>
-          <div className="vat-controls">
-            <label>
-              Year
-              <select value={vatYear} onChange={e => onVatYearChange(e.target.value)}>
-                {years.map(year => <option key={year} value={year}>{year}</option>)}
-              </select>
-            </label>
-          </div>
-        </div>
-        {vatSummary.length === 0 ? (
-          <p>No VAT summary available for the selected year.</p>
-        ) : (
-          <table className="summary-table">
-            <thead>
-              <tr>
-                <th>Year</th>
-                <th>Month</th>
-                <th>Wallet</th>
-                <th>Turnover</th>
-                <th>VAT Total</th>
-                <th>Tax Authority</th>
-              </tr>
-            </thead>
-            <tbody>
-              {vatSummary.map(item => (
-                <tr key={`${item.year}-${item.month}-${item.wallet_type}`}>
-                  <td>{item.year}</td>
-                  <td>{item.month}</td>
-                  <td>{item.wallet_type}</td>
-                  <td>{item.turnover.toFixed(2)}</td>
-                  <td>{item.vat_total.toFixed(2)}</td>
-                  <td>{item.tax_authority}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </section>
-
-      <section className="transactions-panel">
-        <div className="transactions-header">
-          <div>
-            <h2>Transactions</h2>
-            <p className="muted">Use export buttons to download CSV or Excel reports.</p>
-          </div>
-          <div className="header-actions">
-            <button type="button" onClick={() => downloadReport('export/transactions/csv', 'transactions.csv')}>Export CSV</button>
-            <button type="button" onClick={() => downloadReport('export/transactions/excel', 'transactions.xls')}>Export Excel</button>
-            <button type="button" onClick={() => downloadReport('export/vat/csv', 'vat-summary.csv', true)}>Export VAT CSV</button>
-          </div>
-        </div>
-        <div className="transactions-header">
-          <select value={walletFilter} onChange={e => onWalletFilterChange(e.target.value)}>
-            <option value="all">All Wallets</option>
-            <option value="business">Business Wallet</option>
-            <option value="personal">Personal Wallet</option>
-          </select>
-        </div>
-
-        {loading ? <p>Loading...</p> : (
-          <table className="transaction-table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Phone</th>
-                <th>Wallet</th>
-                <th>Direction</th>
-                <th>Amount</th>
-                <th>VAT</th>
-                <th>Provider</th>
-                <th>Note</th>
-              </tr>
-            </thead>
-            <tbody>
-              {txs.map(t => (
-                <tr key={t.id}>
-                  <td>{new Date(t.created_at).toLocaleString()}</td>
-                  <td>{t.phone}</td>
-                  <td>{t.wallet_type}</td>
-                  <td>{t.direction}</td>
-                  <td>{t.amount}</td>
-                  <td>{(t.vat_amount || 0).toFixed(2)}</td>
-                  <td>{t.provider}</td>
-                  <td>{t.note}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </section>
-
-      <section className="partner-panel">
-        <h2>Partner Open API</h2>
-        <p>Authorized partners can retrieve transaction feeds and VAT summaries using an API key.</p>
-        <pre className="api-snippet">
-{`GET ${API_BASE}/partners/transactions?wallet=business&year=${vatYear}
-GET ${API_BASE}/partners/summary
-GET ${API_BASE}/partners/vat-summary?year=${vatYear}
-
-Header: x-api-key: YOUR_SECRET_KEY`}
-        </pre>
-      </section>
-    </div>
+    </main>
   );
 }
 

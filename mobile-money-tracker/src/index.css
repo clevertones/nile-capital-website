@@ -1,4 +1,38 @@
-body { font-family: Arial, Helvetica, sans-serif; background:#f7f7f7; color:#222; }
-.App { background:#fff; padding:20px; border-radius:6px; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
-input, select, button { padding:8px; font-size:14px; border:1px solid #ddd; border-radius:4px; }
-button { cursor:pointer; background:#0078d4; color:#fff; border:none; }
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap');
+
+:root {
+	color-scheme: light;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	margin: 0;
+	min-height: 100vh;
+	font-family: 'Inter', Arial, sans-serif;
+	background:
+		radial-gradient(circle at top left, rgba(93, 202, 165, 0.16), transparent 28%),
+		radial-gradient(circle at top right, rgba(239, 159, 39, 0.12), transparent 24%),
+		linear-gradient(180deg, #f7fcf9 0%, #eef6f1 55%, #eef4ef 100%);
+	color: #12302a;
+}
+
+a {
+	color: inherit;
+}
+
+button,
+input,
+select {
+	font: inherit;
+}
+
+#root {
+	min-height: 100vh;
+}
