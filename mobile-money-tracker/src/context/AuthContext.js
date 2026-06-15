@@ -56,7 +56,7 @@ export function AuthProvider({ children }) {
     };
 
     await setDoc(doc(db, 'agents', user.uid), profile);
-    setAgentProfile(profile);
+    setAgentProfile({ ...profile, trialStartedAt: new Date(), createdAt: new Date() });
     return user;
   }
 
@@ -79,6 +79,7 @@ export function AuthProvider({ children }) {
     if (!agentProfile?.trialStartedAt) return 30;
 
     const start = agentProfile.trialStartedAt.toDate?.() ?? new Date(agentProfile.trialStartedAt);
+    if (Number.isNaN(start.getTime())) return 30;
     const elapsed = (Date.now() - start.getTime()) / (1000 * 60 * 60 * 24);
     return Math.max(0, Math.ceil(30 - elapsed));
   }

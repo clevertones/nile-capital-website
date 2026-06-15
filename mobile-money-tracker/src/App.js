@@ -1,11 +1,16 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { HashRouter, Link, NavLink, Navigate, Route, Routes } from 'react-router-dom';
+import { addDoc, collection, onSnapshot, query, serverTimestamp, where } from 'firebase/firestore';
+import { signOut } from 'firebase/auth';
 import './App.css';
-import { firebaseReady } from './firebase';
+import { auth, db, firebaseReady } from './firebase';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import { useAuth } from './context/AuthContext';
+import SummaryCards from './components/SummaryCards';
+import DateFilter from './components/DateFilter';
+import TransactionList from './components/TransactionList';
 
 const starterTransactions = [
   { id: 1, type: 'Cash in', network: 'M-Pesa', phone: '255 7XX XXX 501', amount: 420000, reference: 'INV-2026-018', note: 'Investor top-up', time: '8 min ago' },
@@ -13,21 +18,48 @@ const starterTransactions = [
   { id: 3, type: 'Cash in', network: 'Airtel Money', phone: '255 7XX XXX 988', amount: 98000, reference: 'RET-2026-129', note: 'Retail collections', time: '1 hr ago' },
 ];
 
-const featureCards = [
-  { title: 'Live transaction feed', copy: 'Track cash in, cash out, and reference notes from one page designed for fast operator workflows.' },
-  { title: 'Firebase-ready', copy: 'The app is wired with a Firebase helper so Firestore can be connected once the config keys are added.' },
-  { title: 'Built for Nile Capital', copy: 'The visual language follows the site: deep green, gold accents, and a clean investor-grade layout.' },
-];
-
-const setupSteps = [
-  'Set your Firebase env vars in `mobile-money-tracker/.env`.',
-  'Connect Firestore collections for transactions and monthly summaries.',
-  'Swap the local demo list for live data once the backend is ready.',
-];
-
-const networkOptions = ['All networks', 'M-Pesa', 'Tigo Pesa', 'Airtel Money', 'HaloPesa'];
-
 const formatAmount = (value) => new Intl.NumberFormat('en-US').format(value);
+
+const defaultForm = { type: 'Cash in', network: 'M-Pesa', phone: '', amount: '', reference: '', note: '' };
+
+function normalizeCreatedAt(createdAt) {
+  if (!createdAt) return null;
+
+  const firestoreDate = createdAt.toDate?.();
+  if (firestoreDate instanceof Date) return firestoreDate;
+
+  const parsed = new Date(createdAt);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function getStartOf(unit, now) {
+  const date = new Date(now);
+
+  if (unit === 'day') date.setHours(0, 0, 0, 0);
+  if (unit === 'week') {
+    const day = date.getDay();
+    date.setDate(date.getDate() - day);
+    date.setHours(0, 0, 0, 0);
+  }
+  if (unit === 'month') {
+    date.setDate(1);
+    date.setHours(0, 0, 0, 0);
+  }
+  if (unit === 'year') {
+    date.setMonth(0, 1);
+    date.setHours(0, 0, 0, 0);
+  }
+
+  return date;
+}
+
+function sortTransactions(items) {
+  return [...items].sort((left, right) => {
+    const leftTime = normalizeCreatedAt(left.createdAt)?.getTime?.() ?? 0;
+    const rightTime = normalizeCreatedAt(right.createdAt)?.getTime?.() ?? 0;
+    return rightTime - leftTime;
+  });
+}
 
 function ProtectedRoute({ children }) {
   const { currentUser, loading } = useAuth();
@@ -57,7 +89,7 @@ function App() {
 
           <div className="status-chip">
             <span className={firebaseReady ? 'status-dot ready' : 'status-dot'} />
-            {firebaseReady ? 'Firebase ready' : 'Firebase setup pending'}
+            {firebaseReady ? 'Tracker online' : 'Tracker unavailable'}
           </div>
         </header>
 
@@ -102,7 +134,7 @@ function OverviewPage() {
           <h1>MoMo Tracker</h1>
           <p className="hero-text">
             A Nile Capital page for tracking mobile money inflows, payouts, and operational notes in one place.
-            This starter is ready to grow into a Firebase-backed workflow.
+            The workspace is built for day-to-day transaction handling.
           </p>
 
           <div className="hero-actions">
@@ -118,27 +150,27 @@ function OverviewPage() {
         </div>
 
         <aside className="hero-panel panel">
-          <div className="panel-head"><span className="panel-label">Starter stack</span><span className="panel-badge">React + Firebase</span></div>
+          <div className="panel-head"><span className="panel-label">Workspace</span><span className="panel-badge">Operational view</span></div>
           <ul className="feature-list">
-            {featureCards.map((feature) => (
-              <li key={feature.title}><h3>{feature.title}</h3><p>{feature.copy}</p></li>
-            ))}
+            <li><h3>Transaction feed</h3><p>Review mobile money inflows, payouts, and reference notes in one place.</p></li>
+            <li><h3>Fast operator layout</h3><p>Move through the workflow quickly with a clean, focused interface.</p></li>
+            <li><h3>Nile Capital brand</h3><p>The visual language stays aligned with the rest of the site.</p></li>
           </ul>
         </aside>
       </section>
 
       <section className="content-grid">
         <section className="panel">
-          <div className="panel-head"><span className="panel-label">How it starts</span><span className="panel-badge">Page first</span></div>
+          <div className="panel-head"><span className="panel-label">Operating model</span><span className="panel-badge">Focus first</span></div>
           <div className="step-list">
-            {setupSteps.map((step, index) => (
-              <div className="step-item" key={step}><span>{index + 1}</span><p>{step}</p></div>
-            ))}
+            <div className="step-item"><span>1</span><p>Track transactions from a single workspace.</p></div>
+            <div className="step-item"><span>2</span><p>Filter activity by time period for faster review.</p></div>
+            <div className="step-item"><span>3</span><p>Keep the ledger clear, current, and easy to scan.</p></div>
           </div>
         </section>
 
         <section className="panel">
-          <div className="panel-head"><span className="panel-label">Recent activity</span><span className="panel-badge">Demo data</span></div>
+          <div className="panel-head"><span className="panel-label">Recent activity</span><span className="panel-badge">Live view</span></div>
           <div className="activity-list">
             {starterTransactions.map((item) => (
               <article className="activity-item" key={item.id}>
@@ -154,37 +186,97 @@ function OverviewPage() {
 }
 
 function TrackerPage() {
-  const [transactions, setTransactions] = useState(starterTransactions);
-  const [filter, setFilter] = useState('All networks');
-  const [form, setForm] = useState({ type: 'Cash in', network: 'M-Pesa', phone: '', amount: '', reference: '', note: '' });
+  const { currentUser } = useAuth();
+  const [transactions, setTransactions] = useState([]);
+  const [filter, setFilter] = useState('today');
+  const [form, setForm] = useState(defaultForm);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
-  const visibleTransactions = useMemo(() => (filter === 'All networks' ? transactions : transactions.filter((item) => item.network === filter)), [transactions, filter]);
+  useEffect(() => {
+    if (!currentUser || !db) {
+      setTransactions([]);
+      setLoading(false);
+      return undefined;
+    }
 
-  const metrics = useMemo(() => {
-    const total = transactions.reduce((sum, item) => sum + item.amount, 0);
-    const cashIn = transactions.filter((item) => item.type === 'Cash in').reduce((sum, item) => sum + item.amount, 0);
-    const cashOut = transactions.filter((item) => item.type === 'Payout').reduce((sum, item) => sum + item.amount, 0);
-    return { total, cashIn, cashOut, liveCount: transactions.length };
-  }, [transactions]);
+    const q = query(collection(db, 'transactions'), where('uid', '==', currentUser.uid));
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const data = snapshot.docs.map((item) => ({ id: item.id, ...item.data() }));
+        setTransactions(sortTransactions(data));
+        setLoading(false);
+      },
+      () => {
+        setTransactions([]);
+        setLoading(false);
+      },
+    );
 
-  const handleSubmit = (event) => {
+    return () => unsubscribe();
+  }, [currentUser]);
+
+  const visibleTransactions = useMemo(() => {
+    const now = new Date();
+    let cutoff = null;
+
+    switch (filter) {
+      case 'today':
+        cutoff = getStartOf('day', now);
+        break;
+      case 'week':
+        cutoff = getStartOf('week', now);
+        break;
+      case 'month':
+        cutoff = getStartOf('month', now);
+        break;
+      case 'year':
+        cutoff = getStartOf('year', now);
+        break;
+      default:
+        cutoff = null;
+    }
+
+    if (!cutoff) return transactions;
+
+    return transactions.filter((transaction) => {
+      const createdAt = normalizeCreatedAt(transaction.createdAt);
+      return createdAt ? createdAt >= cutoff : false;
+    });
+  }, [transactions, filter]);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (!currentUser || !db) return;
+
     const amount = Number.parseFloat(form.amount || '0');
     if (!amount || amount <= 0) return;
 
-    const newTransaction = {
-      id: Date.now(),
-      type: form.type,
-      network: form.network,
-      phone: form.phone || 'Unknown phone',
-      amount,
-      reference: form.reference || `MOMO-${Date.now().toString().slice(-5)}`,
-      note: form.note || 'No note added',
-      time: 'Just now',
-    };
+    setSaving(true);
 
-    setTransactions((current) => [newTransaction, ...current]);
-    setForm({ type: 'Cash in', network: 'M-Pesa', phone: '', amount: '', reference: '', note: '' });
+    try {
+      await addDoc(collection(db, 'transactions'), {
+        uid: currentUser.uid,
+        type: form.type,
+        network: form.network,
+        phone: form.phone || 'Unknown phone',
+        amount,
+        reference: form.reference || `MOMO-${Date.now().toString().slice(-5)}`,
+        note: form.note || 'No note added',
+        time: 'Just now',
+        createdAt: serverTimestamp(),
+      });
+
+      setForm(defaultForm);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    await signOut(auth);
   };
 
   return (
@@ -193,20 +285,19 @@ function TrackerPage() {
         <div>
           <span className="eyebrow">TRACKER PAGE</span>
           <h1>Manage mobile money flow with a clean Nile page.</h1>
-          <p>This starter keeps the data model simple now and leaves room for Firestore collections, authenticated roles, and reporting later.</p>
-        </div>
-
-        <div className="tracker-stats">
-          <article><span>Total volume</span><strong>TZS {formatAmount(metrics.total)}</strong></article>
-          <article><span>Cash in</span><strong>TZS {formatAmount(metrics.cashIn)}</strong></article>
-          <article><span>Payouts</span><strong>TZS {formatAmount(metrics.cashOut)}</strong></article>
-          <article><span>Live entries</span><strong>{metrics.liveCount}</strong></article>
+          <p>Track transactions, review totals, and keep the ledger easy to read.</p>
+          <div className="hero-actions">
+            <button type="button" className="btn-secondary" onClick={handleLogout}>Sign out</button>
+          </div>
         </div>
       </section>
 
+      <SummaryCards transactions={visibleTransactions} />
+      <DateFilter active={filter} onChange={setFilter} />
+
       <section className="tracker-grid">
         <form className="panel tracker-form" onSubmit={handleSubmit}>
-          <div className="panel-head"><span className="panel-label">New transaction</span><span className="panel-badge">Local demo</span></div>
+          <div className="panel-head"><span className="panel-label">New transaction</span><span className="panel-badge">Entry form</span></div>
 
           <div className="field-grid">
             <label><span>Type</span><select value={form.type} onChange={(event) => setForm({ ...form, type: event.target.value })}><option>Cash in</option><option>Payout</option></select></label>
@@ -217,26 +308,23 @@ function TrackerPage() {
             <label className="span-2"><span>Note</span><input value={form.note} onChange={(event) => setForm({ ...form, note: event.target.value })} placeholder="Purpose, desk, or branch note" /></label>
           </div>
 
-          <button type="submit" className="btn-primary btn-wide">Add to tracker</button>
+          <button type="submit" className="btn-primary btn-wide" disabled={saving}>{saving ? 'Saving…' : 'Add to tracker'}</button>
         </form>
 
         <aside className="panel tracker-side">
-          <div className="panel-head"><span className="panel-label">Firebase roadmap</span><span className="panel-badge">Next step</span></div>
-          <div className="info-card"><h3>Ready for Firestore</h3><p>Once your Firebase project keys are added, this page can save transactions to Firestore and sync them across devices.</p></div>
-          <div className="info-card filter-card"><h3>Network filter</h3><div className="chip-row">{networkOptions.map((option) => (<button key={option} type="button" className={`filter-chip ${filter === option ? 'active' : ''}`} onClick={() => setFilter(option)}>{option}</button>))}</div></div>
+          <div className="panel-head"><span className="panel-label">Workspace</span><span className="panel-badge">Fast view</span></div>
+          <div className="info-card"><h3>Focus on the ledger</h3><p>Keep the page centered on transactions, totals, and quick filtering.</p></div>
+          <div className="info-card filter-card"><h3>Quick view</h3><p>Use the date filter above to switch between today, week, month, year, or all records.</p></div>
         </aside>
       </section>
 
       <section className="panel ledger-panel">
         <div className="panel-head"><span className="panel-label">Ledger</span><span className="panel-badge">{visibleTransactions.length} records</span></div>
-        <div className="ledger-list">
-          {visibleTransactions.map((item) => (
-            <article className="ledger-row" key={item.id}>
-              <div><h3>{item.reference}</h3><p>{item.type} · {item.network} · {item.phone}</p><span>{item.note}</span></div>
-              <div className="ledger-amount"><strong>{item.type === 'Cash in' ? '+' : '-'}</strong><strong>TZS {formatAmount(item.amount)}</strong><span>{item.time}</span></div>
-            </article>
-          ))}
-        </div>
+        {loading ? (
+          <p style={{ padding: '0 4px 8px', color: '#58716a' }}>Loading transactions…</p>
+        ) : (
+          <TransactionList transactions={visibleTransactions} />
+        )}
       </section>
     </main>
   );
